@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = brimbellePass
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -18,11 +18,18 @@ SOURCES += main.cpp\
     displayentrycontent.cpp \
     passwordentryline.cpp \
     addentrytab.cpp \
-    configurationtab.cpp
+    configurationtab.cpp \
+    account.cpp \
+    accountsbook.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
     displayentrycontent.h \
     passwordentryline.h \
     addentrytab.h \
-    configurationtab.h
+    configurationtab.h \
+    account.h \
+    accountsbook.h
+
+RESOURCES += \
+    resources.qrc

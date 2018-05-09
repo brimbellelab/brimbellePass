@@ -3,6 +3,7 @@
 
 #include <QTabWidget>
 
+#include "accountsbook.h"
 #include "addentrytab.h"
 #include "configurationtab.h"
 #include "displayentrytab.h"

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>clipboardIco24.png</file>
+        <file>clipboardIco48.png</file>
+    </qresource>
+</RCC>

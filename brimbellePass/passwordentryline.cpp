@@ -2,29 +2,47 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QIcon>
+#include <QStyle>
+
+#include <iostream>
+
+PasswordEntryLine::PasswordEntryLine()
+{
+    PasswordEntryLine("");
+}
+
+
 
 PasswordEntryLine::PasswordEntryLine(const QString password, QWidget *parent) : QWidget(parent)
 {
-    strPassword = new QString(password);
+    strPassword = password;
 
-    lineEditPassword = new QLineEdit(this);
-    lineEditPassword->setText(*strPassword);
-    lineEditPassword->setEchoMode(QLineEdit::Password);
-    lineEditPassword->setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);
+    lineEditPassword.setText(strPassword);
+    lineEditPassword.setEchoMode(QLineEdit::Password);
+    lineEditPassword.setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);
+    btnCopy.setIconSize(QSize(12, 12));
+    btnCopy.setIcon(QIcon(":icons/clipboardIco24.png"));
+    QObject::connect(&btnCopy, SIGNAL(clicked()), this, SLOT(addPasswordToClipboard()));
 
-    btnCopy = new QPushButton("Cp", this);
-    QObject::connect(btnCopy, SIGNAL(clicked()), this, SLOT(addPasswordToClipboard()));
+    checkboxPasswordHidden.setText("Hide");
+    checkboxPasswordHidden.setCheckState(Qt::CheckState::Checked);
+    QObject::connect(&checkboxPasswordHidden, SIGNAL(clicked(bool)), this, SLOT(setFieldAsPassword(bool)));
 
-    checkboxPasswordHidden = new QCheckBox("Hide", this);
-    checkboxPasswordHidden->setCheckState(Qt::CheckState::Checked);
-    QObject::connect(checkboxPasswordHidden, SIGNAL(clicked(bool)), this, SLOT(setFieldAsPassword(bool)));
+    layout.addWidget(&lineEditPassword, 0, 0);
+    layout.addWidget(&btnCopy, 0, 1);
+    layout.addWidget(&checkboxPasswordHidden, 0, 2);
 
-    layout = new QGridLayout();
-    layout->addWidget(lineEditPassword, 0, 0);
-    layout->addWidget(btnCopy, 0, 1);
-    layout->addWidget(checkboxPasswordHidden, 0, 2);
+    this->setLayout(&layout);
+}
 
-    this->setLayout(layout);
+
+
+void
+PasswordEntryLine::setText(const QString text)
+{
+    strPassword = text;
+    lineEditPassword.setText(strPassword);
 }
 
 
@@ -34,11 +52,11 @@ PasswordEntryLine::setFieldAsPassword(bool hide)
 {
     if (hide)
     {
-        lineEditPassword->setEchoMode(QLineEdit::Password);
+        lineEditPassword.setEchoMode(QLineEdit::Password);
     }
     else
     {
-        lineEditPassword->setEchoMode(QLineEdit::Normal);
+        lineEditPassword.setEchoMode(QLineEdit::Normal);
     }
 }
 
@@ -47,18 +65,6 @@ PasswordEntryLine::setFieldAsPassword(bool hide)
 void
 PasswordEntryLine::addPasswordToClipboard(void)
 {
-    //QClipboard::setText("pouet");
     QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(*this->strPassword, QClipboard::Clipboard);
-}
-
-
-
-PasswordEntryLine::~PasswordEntryLine()
-{
-    delete lineEditPassword;
-    delete btnCopy;
-    delete checkboxPasswordHidden;
-    delete layout;
-    delete strPassword;
+    clipboard->setText(this->strPassword, QClipboard::Clipboard);
 }

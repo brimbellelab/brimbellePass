@@ -1,11 +1,14 @@
 #ifndef DISPLAYENTRYCONTENT_H
 #define DISPLAYENTRYCONTENT_H
 
+#include "account.h"
+
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QTextEdit>
+#include <QVBoxLayout>
 #include <QVector>
 #include <QWidget>
 
@@ -16,6 +19,7 @@ class DisplayEntryContent : public QWidget
     Q_OBJECT
 public:
     explicit DisplayEntryContent(QWidget *parent = 0);
+    void update(const Account &account);
 
 signals:
 
@@ -27,14 +31,17 @@ public slots:
     void saveChanges(void);
 
 private:
+    Account currentAccount;
     QLineEdit *lineEditWebsite;
     QGroupBox *gbLogins;
-    QLineEdit *login;
+    QVBoxLayout *layoutLogins;
+    QVector<QLineEdit*> entryLineLogins;
     QGroupBox *gbCurrentPassword;
     PasswordEntryLine *entryLineCurrentPassword;
     QPushButton *btnNewPassword;
     QGroupBox *gbOldPasswords;
-    QVector<PasswordEntryLine> *entryLineOldPasswords;
+    QVBoxLayout *layoutOldPasswords;
+    QVector<PasswordEntryLine*> entryLineOldPasswords;
     QTextEdit *textEditMisc;
     QPushButton *btnEditEntry;
 };
