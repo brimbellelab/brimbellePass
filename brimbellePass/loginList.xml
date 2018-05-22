@@ -1,0 +1,23 @@
+<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?>
+
+<!DOCTYPE loginList SYSTEM "loginList.dtd">
+
+<loginList>
+    <entry id = "1">
+        <key>1</key>
+        <website>mybank.com</website>
+        <login type="email">john.doe@gmail.com</login>
+        <login type="accountNumber">123456789</login>
+        <safetyQuestion index="1">Maiden name of your mother</safetyQuestion>
+        <safetyQuestion index="2">Model of your first car</safetyQuestion>
+        <safetyQuestion index="3">What street did you grow up</safetyQuestion>
+        <misc>Do not access from abroad or it will lock my account!</misc>
+    </entry>
+
+    <entry id = "2">
+        <key>2</key>
+        <website>amazon.com</website>
+        <login type="email">john.doe@gmail.com</login>
+        <misc>Hey Alexa, show me the deals of the day</misc>
+    </entry>
+</loginList>

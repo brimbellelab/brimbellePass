@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +21,8 @@ SOURCES += main.cpp\
     addentrytab.cpp \
     configurationtab.cpp \
     account.cpp \
-    accountsbook.cpp
+    accountsbook.cpp \
+    xmldom.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -29,7 +31,8 @@ HEADERS  += mainwindow.h \
     addentrytab.h \
     configurationtab.h \
     account.h \
-    accountsbook.h
+    accountsbook.h \
+    xmldom.h
 
 RESOURCES += \
     resources.qrc

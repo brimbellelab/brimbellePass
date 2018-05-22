@@ -3,4 +3,7 @@
         <file>clipboardIco24.png</file>
         <file>clipboardIco48.png</file>
     </qresource>
+    <qresource prefix="/xml">
+        <file>loginList.xml</file>
+    </qresource>
 </RCC>
