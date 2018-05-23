@@ -8,11 +8,12 @@ class XmlDom : public QWidget
 {
     Q_OBJECT
 public:
-    explicit XmlDom(QWidget *parent = 0);
+    explicit XmlDom(const char* loginPath, const char* pwdPath, QWidget *parent = 0);
 
 signals:
 
 public slots:
+
 };
 
 #endif // XMLDOM_H

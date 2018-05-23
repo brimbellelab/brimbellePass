@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     configurationtab.cpp \
     account.cpp \
     accountsbook.cpp \
-    xmldom.cpp
+    xmldom.cpp \
+    xmlinputfilesource.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     configurationtab.h \
     account.h \
     accountsbook.h \
-    xmldom.h
+    xmldom.h \
+    xmlinputfilesource.h
 
 RESOURCES += \
     resources.qrc

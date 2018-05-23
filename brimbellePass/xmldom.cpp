@@ -6,16 +6,18 @@
 
 using namespace std;
 
-XmlDom::XmlDom(QWidget *parent) : QWidget(parent)
+XmlDom::XmlDom(const char* loginPath, const char* pwdPath, QWidget *parent) : QWidget(parent)
 {
-    QDomDocument dom("mon_xml");
-    QFile xml_doc(":/xml/loginList.xml");
+    QDomDocument loginXml("loginXml");
+//    QDomDocument pwdXml("pwdXml");
+
+    QFile xml_doc(loginPath);//":/xml/loginList.xml");
     if(!xml_doc.open(QIODevice::ReadOnly))
     {
-        QMessageBox::warning(this, "Error while opening the XML document", "The XML document couldn't be opened");
+        QMessageBox::warning(this, "Error while opening the logins file", "The logins file couldn't be opened. Check path in the configuration tab.");
         return;
     }
-    if (!dom.setContent(&xml_doc))
+    if (!loginXml.setContent(&xml_doc))
     {
         xml_doc.close();
         QMessageBox::warning(this,
@@ -24,7 +26,7 @@ XmlDom::XmlDom(QWidget *parent) : QWidget(parent)
         return;
     }
 
-    QDomElement loginsRoot = dom.documentElement();
+    QDomElement loginsRoot = loginXml.documentElement();
 
     // Gonna iterate on children of the root.
     QDomElement loginEntry = loginsRoot.firstChild().toElement();

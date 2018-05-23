@@ -6,4 +6,7 @@
     <qresource prefix="/xml">
         <file>loginList.xml</file>
     </qresource>
+    <qresource prefix="/conf">
+        <file>brimbellepass.conf</file>
+    </qresource>
 </RCC>
