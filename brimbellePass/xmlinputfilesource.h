@@ -14,15 +14,19 @@ public:
     QString getPath(void);
 
 signals:
+    void pathChanged(const QString &);
 
-public slots:
+private slots:
     void browse(void);
+    void updatePath(const QString &path);
 
 private:
     QLineEdit lineEditPath;
     QPushButton btnBrowse;
     QString strPath;
     QString strType;
+
+
 };
 
 #endif // XMLINPUTFILESOURCE_H
