@@ -12,7 +12,7 @@ class DisplayEntryTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DisplayEntryTab(QWidget *parent = 0);
+    explicit DisplayEntryTab(AccountsBook *accounts, QWidget *parent = 0);
 
 signals:
 

@@ -5,6 +5,7 @@
 
 #include "accountsbook.h"
 #include "addentrytab.h"
+#include "configfile.h"
 #include "configurationtab.h"
 #include "displayentrytab.h"
 
@@ -17,6 +18,8 @@ public:
     ~MainWindow();
 
 private:
+    AccountsBook *accountsBook;
+    ConfigFile *confFile;
     DisplayEntryTab *displayEntryTab;
     AddEntryTab *addEntryTab;
     ConfigurationTab *configurationTab;

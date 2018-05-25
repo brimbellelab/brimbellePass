@@ -58,4 +58,5 @@ XmlDom::XmlDom(const char* loginPath, const char* pwdPath, QWidget *parent) : QW
         }
         loginEntry = loginEntry.nextSibling().toElement();
     }
+    this->hide();
 }

@@ -14,7 +14,7 @@ class AccountsBook
 {
 public:
     AccountsBook(void);
-// TODO    AccountBook(xmlFileLogin, xmlFilePassword);
+    AccountsBook(const std::string &xmlFileLogin, const std::string &xmlFilePassword);
     void addAccount(Account& newAccount);
     void deleteAccount(uint32_t accountKey);
     void deleteAccount(std::string website);
