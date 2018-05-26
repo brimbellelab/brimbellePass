@@ -1,18 +1,23 @@
 #ifndef XMLDOM_H
 #define XMLDOM_H
 
-#include <QWidget>
+#include <QString>
 #include <QtXml>
+#include <QWidget>
 
 class XmlDom : public QWidget
 {
     Q_OBJECT
 public:
-    explicit XmlDom(const char* loginPath, const char* pwdPath, QWidget *parent = 0);
-
+    explicit XmlDom(const QString &xmlPath, QWidget *parent = 0);
+    QDomDocument* getDomDocument(void);
 signals:
 
 public slots:
+
+protected:
+    QString xmlFilePath;
+    QDomDocument *xmlDomDocument;
 
 };
 

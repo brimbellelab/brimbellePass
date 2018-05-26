@@ -9,6 +9,7 @@ class Account
 {
 public:
     Account(void);
+    Account(uint32_t key);
     Account(uint32_t key, std::string website);
     Account(uint32_t key,
             std::string website,

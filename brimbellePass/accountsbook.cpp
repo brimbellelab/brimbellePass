@@ -35,10 +35,48 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
     cout << "Path to passwords file: " << xmlFilePassword << endl;
 
     // Load logins and passwords DOM.
-    XmlDom* domAccounts = new XmlDom(xmlFileLogin.c_str(),
-                             xmlFilePassword.c_str());
+    XmlDom* domLogins = new XmlDom(QString::fromStdString(xmlFileLogin));
 
-//    fillAccountsBookFromDom;
+    QDomElement loginsRoot = domLogins->getDomDocument()->documentElement();
+
+    // Gonna iterate on children of the root.
+    QDomElement loginEntry = loginsRoot.firstChild().toElement();
+    while (!loginEntry.isNull())
+    {
+        // Ensure it's the root of an entry.
+        if (loginEntry.tagName() == "entry")
+        {
+            QString id = loginEntry.attribute("id", "noID");
+            QString website = loginEntry.attribute("website", "unknwown");
+            cout << "ID of this entry: " << id.toStdString() << endl;
+            Account *account = new Account(id.toUInt(), website.toStdString());
+            QDomElement entryChild = loginEntry.firstChild().toElement();
+
+            while (!entryChild.isNull())
+            {
+                if (entryChild.tagName() == "login")
+                {
+                    string login = entryChild.firstChild().toText().data().toStdString();
+                    cout << "tagname login: " << login << endl;
+                    account->addLogin(login);
+                }
+                else if(entryChild.tagName() == "misc")
+                {
+                    string misc = entryChild.firstChild().toText().data().toStdString();
+                    cout << "tagname misc: " << misc << endl;
+                    account->addMisc(misc);
+                }
+                else
+                {
+                    cout << "tagname not handled yet: " << entryChild.tagName().toStdString() << endl;
+                }
+                entryChild = entryChild.nextSibling().toElement();
+            }
+            this->addAccount(*account);
+        }
+        loginEntry = loginEntry.nextSibling().toElement();
+    }
+    // XmlDomLogins* domPasswords = new XmlDomPasswords(xmlFilePassword.c_str());
 }
 
 void
