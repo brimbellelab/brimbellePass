@@ -19,11 +19,29 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
     QVBoxLayout *layoutCurrentPassword = new QVBoxLayout;
     layoutCurrentPassword->addWidget(entryLineCurrentPassword);
     layoutCurrentPassword->addWidget(btnNewPassword);
+    layoutCurrentPassword->setMargin(defaultMargin);
     gbCurrentPassword->setLayout(layoutCurrentPassword);
 
     gbOldPasswords = new QGroupBox("Old passwords");
     layoutOldPasswords = new QVBoxLayout;
+    layoutOldPasswords->setMargin(defaultMargin);
     gbOldPasswords->setLayout(layoutOldPasswords);
+
+    gbSafetyQA = new QGroupBox("Safety questions");
+    comboBoxSafetyQuestion = new QComboBox();
+    comboBoxSafetyQuestion->addItems(currentAccount.getSafetyQuestions());
+    safetyAnswer = new PasswordEntryLine("");
+    if (comboBoxSafetyQuestion->count() > 0)
+    {
+        updateSafetyAnswerField(0); // Always point at the first item on creation.
+    }
+    QVBoxLayout *layoutSafetyQA = new QVBoxLayout;
+    layoutSafetyQA->addWidget(comboBoxSafetyQuestion);
+    layoutSafetyQA->addWidget(safetyAnswer);
+    layoutSafetyQA->setMargin(defaultMargin);
+    gbSafetyQA->setLayout(layoutSafetyQA);
+    QObject::connect(comboBoxSafetyQuestion, SIGNAL(currentIndexChanged(int)),
+                     this, SLOT(updateSafetyAnswerField(const int)));
 
     textEditMisc = new QTextEdit();
 
@@ -35,8 +53,10 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
     layout->addWidget(gbLogins);
     layout->addWidget(gbCurrentPassword);
     layout->addWidget(gbOldPasswords);
+    layout->addWidget(gbSafetyQA);
     layout->addWidget(textEditMisc);
     layout->addWidget(btnEditEntry);
+    layout->setMargin(defaultMargin);
 
     this->setLayout(layout);
 }
@@ -74,6 +94,9 @@ DisplayEntryContent::update(const Account *account)
     }
     entryLineOldPasswords.clear();
 
+    // Clean "safety questions" field.
+    comboBoxSafetyQuestion->clear();
+
     // Clean 'misc' field.
     textEditMisc->clear();
 
@@ -110,6 +133,13 @@ DisplayEntryContent::update(const Account *account)
     }
     //TODO: a call to generate() would probably be better?
 
+    // Fill safety questions infos.
+    if (!currentAccount.getSafetyQuestions().empty())
+    {
+        comboBoxSafetyQuestion->addItems(currentAccount.getSafetyQuestions());
+        updateSafetyAnswerField(0);
+    }
+
     // Fill misc infos.
     if (!currentAccount.getMisc().empty())
     {
@@ -138,3 +168,18 @@ DisplayEntryContent::saveChanges(void)
     ;//TODO
 }
 
+
+
+void
+DisplayEntryContent::updateSafetyAnswerField(const int index)
+{
+    // As defined in the Qt doc, QComboBox::currentIndexChanged signal can send -1 if the comboBox becomes empty or if
+    // index is reset.
+    constexpr int resetOrEmptyQComboBoxIndexChangedCode = -1;
+    if (index == resetOrEmptyQComboBoxIndexChangedCode)
+    {
+        safetyAnswer->setText("");
+        return;
+    }
+    safetyAnswer->setText(QString::fromStdString(currentAccount.getSafetyAnswer(index)));
+}

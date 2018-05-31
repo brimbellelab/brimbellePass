@@ -113,6 +113,7 @@ Account::addSafetyQA(string question, string answer)
 }
 
 
+
 void
 Account::addSafetyQuestion(const uint8_t id, std::string question)
 {
@@ -120,9 +121,7 @@ Account::addSafetyQuestion(const uint8_t id, std::string question)
     {
         // When m_safetyQA is resized, pairs need to be allocated and filled in the appended cells.
         m_safetyQA.resize(id + 1, make_pair("", ""));
-        cout << "Resizing m_safetyQA from addSafetyQuestion" << endl;
     }
-    cout << "Add safety question #" << unsigned(id) << ": " << question << endl;
     m_safetyQA[id].first.assign(question);
 }
 
@@ -135,9 +134,8 @@ Account::addSafetyAnswer(const uint8_t id, const string answer)
     {
         // When m_safetyQA is resized, pairs need to be allocated and filled in the appended cells.
         m_safetyQA.resize(id + 1, make_pair("", ""));
-        cout << "Resizing m_safetyQA from addSafetyAnswer" << endl;
+        cout << "Resizing m_safetyQA from addSafetyAnswer, which is not expected" << endl;
     }
-    cout << "Add safety answer #" << unsigned(id) << ": " << answer << endl;
     m_safetyQA[id].second.assign(answer);
 }
 
@@ -199,6 +197,32 @@ Account::getSafetyQA(void) const
 }
 
 
+QStringList
+Account::getSafetyQuestions(void) const
+{
+    QStringList safetyQuestionsList;
+    for (uint8_t index = 0; index < m_safetyQA.capacity(); index++)
+    {
+        safetyQuestionsList.push_back(QString::fromStdString(m_safetyQA[index].first));
+    }
+    return safetyQuestionsList;
+}
+
+
+
+string
+Account::getSafetyAnswer(const uint8_t index) const
+{
+    if (index >= m_safetyQA.capacity())
+    {
+        cout << "Attempt to access a safety answer beyond range: " << unsigned(index)
+             << ", available :" << unsigned(m_safetyQA.capacity()) << endl;
+        return "";
+    }
+    return m_safetyQA[index].second;
+}
+
+
 
 list<string>
 Account::getMisc(void) const
@@ -255,4 +279,3 @@ Account::operator=(const Account& other)
     }
     return *this;
   }
-

@@ -6,6 +6,8 @@
 #include <utility>
 #include <vector>
 
+#include <QStringList>
+
 class Account
 {
 public:
@@ -40,6 +42,8 @@ public:
     std::string getCurrentPassword(void) const;
     std::list<std::string> getOldPasswords(void) const;
     std::vector<std::pair<std::string, std::string>> getSafetyQA(void) const;
+    QStringList getSafetyQuestions(void) const;
+    std::string getSafetyAnswer(const uint8_t index) const;
     std::list<std::string> getMisc(void) const;
 
 private:

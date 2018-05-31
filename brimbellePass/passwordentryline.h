@@ -27,6 +27,7 @@ public slots:
     void addPasswordToClipboard(void);
 
 private:
+    static const int defaultMargin = 5;
     QLineEdit lineEditPassword;
     QToolButton btnCopy;
     QCheckBox checkboxPasswordHidden;

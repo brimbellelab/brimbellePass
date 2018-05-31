@@ -32,7 +32,7 @@ PasswordEntryLine::PasswordEntryLine(const QString password, QWidget *parent) : 
     layout.addWidget(&lineEditPassword, 0, 0);
     layout.addWidget(&btnCopy, 0, 1);
     layout.addWidget(&checkboxPasswordHidden, 0, 2);
-
+    layout.setMargin(defaultMargin);
     this->setLayout(&layout);
 }
 

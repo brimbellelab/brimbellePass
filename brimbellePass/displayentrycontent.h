@@ -4,6 +4,7 @@
 #include "account.h"
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QPushButton>
@@ -30,7 +31,12 @@ public slots:
     /// Trigger the save of any changes made to this entry.
     void saveChanges(void);
 
+    // Update the content of the safety answer field.
+    // @param[in] index Index of the safety answer to be loaded.
+    void updateSafetyAnswerField(const int index);
+
 private:
+    static const int defaultMargin = 5;
     Account currentAccount;
     QLineEdit *lineEditWebsite;
     QGroupBox *gbLogins;
@@ -42,6 +48,9 @@ private:
     QGroupBox *gbOldPasswords;
     QVBoxLayout *layoutOldPasswords;
     QVector<PasswordEntryLine*> entryLineOldPasswords;
+    QGroupBox *gbSafetyQA;
+    QComboBox *comboBoxSafetyQuestion;
+    PasswordEntryLine *safetyAnswer;
     QTextEdit *textEditMisc;
     QPushButton *btnEditEntry;
 };

@@ -8,7 +8,7 @@ MainWindow::MainWindow() : QTabWidget()
     accountsBook = new AccountsBook(confFile->getLoginsFilePath().toStdString(),
                                     confFile->getPasswordsFilePath().toStdString());
 
-    setFixedSize(400, 600);
+    setFixedSize(400, 650);
 
     // Create the 3 tabs of the main window.
     displayEntryTab = new DisplayEntryTab(accountsBook, this);

@@ -56,11 +56,10 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
                     string login = entryChild.firstChild().toText().data().toStdString();
                     account->addLogin(login);
                 }
-                else if(entryChild.tagName() == "safetyQuestionAnswer")
+                else if(entryChild.tagName() == "safetyQuestion")
                 {
                     auto index = entryChild.attribute("index", "0").toUInt();
                     string safetyQuestion = entryChild.firstChild().toText().data().toStdString();
-                    cout << "Safety question " << index << ": " << safetyQuestion << endl;
                     account->addSafetyQuestion(index, safetyQuestion);
                 }
                 else if(entryChild.tagName() == "misc")
@@ -109,11 +108,10 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
                         string oldPwd = entryChild.firstChild().toText().data().toStdString();
                         account->addOldPassword(oldPwd);
                     }
-                    else if(entryChild.tagName() == "safetyQuestionAnswer")
+                    else if(entryChild.tagName() == "safetyAnswer")
                     {
                         auto index = entryChild.attribute("index", "0").toUInt();
                         string safetyAnswer = entryChild.firstChild().toText().data().toStdString();
-                        cout << "Safety answer " << index << ": " << safetyAnswer << endl;
                         account->addSafetyAnswer(index, safetyAnswer);
                     }
                     else
@@ -128,11 +126,15 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
     }
 }
 
+
+
 void
 AccountsBook::addAccount(Account* newAccount)
 {
     m_book.insert(newAccount);
 }
+
+
 
 void
 AccountsBook::deleteAccount(uint32_t accountKey)
@@ -141,16 +143,19 @@ AccountsBook::deleteAccount(uint32_t accountKey)
      m_book.erase(m_book.find(getAccountPointer(accountKey)));
 }
 
+
+
 void
 AccountsBook::deleteAccount(const string website)
 {
     m_book.erase(m_book.find(getAccountPointer(website)));
 }
 
+
+
 const Account*
 AccountsBook::getAccount(const uint32_t accountKey) const
 {
-//    return getAccountPointer(accountKey);
     set<Account*>::const_iterator it;
     // TODO create a functor for that action instead.
     for (it = m_book.begin(); it != m_book.end(); ++it)
@@ -162,6 +167,8 @@ AccountsBook::getAccount(const uint32_t accountKey) const
     }
     throw string("Account " + to_string(accountKey) + " not found");
 }
+
+
 
 const Account*
 AccountsBook::getAccount(const string website) const
@@ -178,6 +185,8 @@ AccountsBook::getAccount(const string website) const
     throw string("Account "+ website + " not found");
 }
 
+
+
 QStringList
 AccountsBook::getWebsiteList(void)
 {
@@ -190,6 +199,8 @@ AccountsBook::getWebsiteList(void)
     return websiteList;
 }
 
+
+
 void
 AccountsBook::displayWebsiteList(ostream& stream) const
 {
@@ -200,6 +211,8 @@ AccountsBook::displayWebsiteList(ostream& stream) const
         stream << (**it).getWebsite();
     }
 }
+
+
 
 Account*
 AccountsBook::getAccountPointer(const uint32_t accountKey)
@@ -216,6 +229,8 @@ AccountsBook::getAccountPointer(const uint32_t accountKey)
     throw string("Account " + to_string(accountKey) + " not found");
 }
 
+
+
 Account*
 AccountsBook::getAccountPointer(const string website)
 {
@@ -230,6 +245,8 @@ AccountsBook::getAccountPointer(const string website)
     }
     throw string("Account " + website + " not found");
 }
+
+
 
 ostream& operator<< (ostream& os, const AccountsBook& accountBook)
 {
