@@ -1,7 +1,5 @@
 #include "displayentrycontent.h"
 
-#include <algorithm>
-
 #include <QVBoxLayout>
 
 using namespace std;
@@ -45,7 +43,8 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 
 
 
-void DisplayEntryContent::update(const Account &account)
+void
+DisplayEntryContent::update(const Account *account)
 {
     // Start with cleaning the previous content.
 
@@ -79,7 +78,7 @@ void DisplayEntryContent::update(const Account &account)
     textEditMisc->clear();
 
     // Bind the content of this page with the new account infos.
-    currentAccount = account;
+    currentAccount = *account;
 
     // Fill website field infos.
     lineEditWebsite->setText(QString::fromStdString(currentAccount.getWebsite()));

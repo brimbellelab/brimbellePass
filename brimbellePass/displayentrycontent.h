@@ -19,7 +19,7 @@ class DisplayEntryContent : public QWidget
     Q_OBJECT
 public:
     explicit DisplayEntryContent(QWidget *parent = 0);
-    void update(const Account &account);
+    void update(const Account *account);
 
 signals:
 

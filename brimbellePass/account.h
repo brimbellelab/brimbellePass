@@ -29,6 +29,7 @@ public:
     void changeCurrentPassword(std::string newPassword);
     void addSafetyQA(std::string question, std::string answer);
     void addMisc(std::string misc);
+    Account& operator=(const Account& other);
 
     uint32_t getKey(void) const;
     std::list<std::string> getLogins(void) const;
@@ -50,5 +51,6 @@ private:
 
 bool operator< (const Account &a, const Account &b);
 bool operator> (const Account &a, const Account &b);
+bool operator== (const Account &a, const Account &b);
 
 #endif // ACCOUNT_H

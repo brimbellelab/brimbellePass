@@ -191,3 +191,36 @@ operator> (const Account &a, const Account &b)
 }
 
 
+
+bool
+operator== (const Account &a, const Account &b)
+{
+    return (a.getKey() == b.getKey());
+}
+
+
+
+Account&
+Account::operator=(const Account& other)
+{
+    if (this != &other)
+    {
+        // Clearing existing content.
+        this->m_logins.clear();
+        this->m_logins.clear();
+        this->m_misc.clear();
+        this->m_oldPasswords.clear();
+        this->m_safetyQA.clear();
+
+        // Copying content.
+        this->m_key = other.getKey();
+        this->m_website = other.getKey();
+        this->m_currentPassword = other.getCurrentPassword();
+        this->m_logins = other.getLogins();
+        this->m_oldPasswords = other.getOldPasswords();
+        this->m_misc = other.getMisc();
+        this->m_safetyQA = other.getSafetyQA();
+    }
+    return *this;
+  }
+

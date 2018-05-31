@@ -4,8 +4,6 @@
 
 #include <QVBoxLayout>
 
-#include <iostream>
-
 using namespace std;
 
 ConfigurationTab::ConfigurationTab(ConfigFile *configFile, QWidget *parent) : QWidget(parent)

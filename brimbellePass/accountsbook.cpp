@@ -2,6 +2,7 @@
 
 #include "xmldom.h"
 
+#include <algorithm>
 #include <iostream>
 #include <iterator>
 
@@ -11,17 +12,16 @@ using namespace std;
 
 AccountsBook::AccountsBook(void)
 {
-    // @todo: Replace with dynamic read of an XML file whenever possible.
     // For now, just some dummy content in the combobox.
-    Account amazon = Account(0, "Amazon", "johndoe@gmail.com", "abcdef");
-    amazon.addLogin("johndoe");
-    Account bank = Account(1, "Bank", "johndoe@gmail.com", "azerty");
-    Account banned = Account(2, "Banned", "johndoe@gmail.com", "qsdfg");
-    Account irs = Account(3, "IRS", "johndoe@gmail.com", "wxcvb");
-    irs.addOldPassword("tooSimple");
-    irs.addOldPassword("StillTooSimple");
-    irs.addMisc("I'd like them to forget I exist so that I don't have to pay!");
-    irs.addMisc("Last year return: $200");
+    Account* amazon = new Account(0, "Amazon", "johndoe@gmail.com", "abcdef");
+    amazon->addLogin("johndoe");
+    Account* bank = new Account(1, "Bank", "johndoe@gmail.com", "azerty");
+    Account* banned = new Account(2, "Banned", "johndoe@gmail.com", "qsdfg");
+    Account* irs = new Account(3, "IRS", "johndoe@gmail.com", "wxcvb");
+    irs->addOldPassword("tooSimple");
+    irs->addOldPassword("StillTooSimple");
+    irs->addMisc("I'd like them to forget I exist so that I don't have to pay!");
+    irs->addMisc("Last year return: $200");
 
     this->addAccount(amazon);
     this->addAccount(bank);
@@ -31,12 +31,8 @@ AccountsBook::AccountsBook(void)
 
 AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &xmlFilePassword)
 {
-    cout << "Path to logins file: " << xmlFileLogin << endl;
-    cout << "Path to passwords file: " << xmlFilePassword << endl;
-
-    // Load logins and passwords DOM.
+    // Load logins DOM.
     XmlDom* domLogins = new XmlDom(QString::fromStdString(xmlFileLogin));
-
     QDomElement loginsRoot = domLogins->getDomDocument()->documentElement();
 
     // Gonna iterate on children of the root.
@@ -48,22 +44,21 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
         {
             QString id = loginEntry.attribute("id", "noID");
             QString website = loginEntry.attribute("website", "unknwown");
-            cout << "ID of this entry: " << id.toStdString() << endl;
-            Account *account = new Account(id.toUInt(), website.toStdString());
-            QDomElement entryChild = loginEntry.firstChild().toElement();
 
+            // Create a new account for this entry now that we know the id and website.
+            Account *account = new Account(id.toUInt(), website.toStdString());
+
+            QDomElement entryChild = loginEntry.firstChild().toElement();
             while (!entryChild.isNull())
             {
                 if (entryChild.tagName() == "login")
                 {
                     string login = entryChild.firstChild().toText().data().toStdString();
-                    cout << "tagname login: " << login << endl;
                     account->addLogin(login);
                 }
                 else if(entryChild.tagName() == "misc")
                 {
                     string misc = entryChild.firstChild().toText().data().toStdString();
-                    cout << "tagname misc: " << misc << endl;
                     account->addMisc(misc);
                 }
                 else
@@ -72,15 +67,56 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
                 }
                 entryChild = entryChild.nextSibling().toElement();
             }
-            this->addAccount(*account);
+            // Now that the account contains the logins info, it is added to the AccountsBook.
+            this->addAccount(account);
         }
         loginEntry = loginEntry.nextSibling().toElement();
     }
-    // XmlDomLogins* domPasswords = new XmlDomPasswords(xmlFilePassword.c_str());
+
+    // Load password DOM.
+    XmlDom* domPasswords = new XmlDom(QString::fromStdString(xmlFilePassword));
+    QDomElement pwdsRoot = domPasswords->getDomDocument()->documentElement();
+
+    // Gonna iterate on children of the root.
+    QDomElement pwdEntry = pwdsRoot.firstChild().toElement();
+    while (!pwdEntry.isNull())
+    {
+        // Ensure it's the root of an entry.
+        if (pwdEntry.tagName() == "entry")
+        {
+            QString id = pwdEntry.attribute("id", "noID");
+            // Now that we have the ID, the corresponding account can be fetched from the accountsBook.
+            Account *account = getAccountPointer(id.toUInt());
+            if (account != NULL)
+            {
+                QDomElement entryChild = pwdEntry.firstChild().toElement();
+                while (!entryChild.isNull())
+                {
+                    if (entryChild.tagName() == "password")
+                    {
+                        string pwd = entryChild.firstChild().toText().data().toStdString();
+                        account->setCurrentPassword(pwd);
+                    }
+                    else if(entryChild.tagName() == "oldPassword")
+                    {
+                        string oldPwd = entryChild.firstChild().toText().data().toStdString();
+                        account->addOldPassword(oldPwd);
+                    }
+                    //else if(entryChild.tagName() == "safetyQuestionAnswer") // TODO
+                    else
+                    {
+                        cout << "tagname not handled yet: " << entryChild.tagName().toStdString() << endl;
+                    }
+                    entryChild = entryChild.nextSibling().toElement();
+                }
+            }
+        }
+        pwdEntry = pwdEntry.nextSibling().toElement();
+    }
 }
 
 void
-AccountsBook::addAccount(Account& newAccount)
+AccountsBook::addAccount(Account* newAccount)
 {
     m_book.insert(newAccount);
 }
@@ -89,23 +125,24 @@ void
 AccountsBook::deleteAccount(uint32_t accountKey)
 {
 
-     m_book.erase(m_book.find(getAccount(accountKey)));
+     m_book.erase(m_book.find(getAccountPointer(accountKey)));
 }
 
 void
 AccountsBook::deleteAccount(const string website)
 {
-    m_book.erase(m_book.find(getAccount(website)));
+    m_book.erase(m_book.find(getAccountPointer(website)));
 }
 
-Account
-AccountsBook::getAccount(const uint32_t accountKey)
+const Account*
+AccountsBook::getAccount(const uint32_t accountKey) const
 {
-    set<Account>::iterator it;
+//    return getAccountPointer(accountKey);
+    set<Account*>::const_iterator it;
     // TODO create a functor for that action instead.
     for (it = m_book.begin(); it != m_book.end(); ++it)
     {
-        if ((*it).getKey() == accountKey)
+        if ((**it).getKey() == accountKey)
         {
             return *it;
         }
@@ -113,16 +150,16 @@ AccountsBook::getAccount(const uint32_t accountKey)
     throw string("Account " + to_string(accountKey) + " not found");
 }
 
-Account
-AccountsBook::getAccount(const string website)
+const Account*
+AccountsBook::getAccount(const string website) const
 {
-    set<Account>::iterator it;
+    set<Account*>::const_iterator it;
     // TODO create a functor for that action instead.
     for (it = m_book.begin(); it != m_book.end(); ++it)
     {
-        if ((*it).getWebsite() == website)
+        if ((**it).getWebsite() == website)
         {
-            return *it;
+           return *it;
         }
     }
     throw string("Account "+ website + " not found");
@@ -131,11 +168,11 @@ AccountsBook::getAccount(const string website)
 QStringList
 AccountsBook::getWebsiteList(void)
 {
-    QStringList websiteList;//m_book.size());
-    set<Account>::iterator it;
+    QStringList websiteList;
+    set<Account*>::iterator it;
     for (it = m_book.begin(); it != m_book.end(); ++it)
     {
-        websiteList << QString::fromStdString((*it).getWebsite());
+        websiteList << QString::fromStdString((**it).getWebsite());
     }
     return websiteList;
 }
@@ -143,11 +180,42 @@ AccountsBook::getWebsiteList(void)
 void
 AccountsBook::displayWebsiteList(ostream& stream) const
 {
-    set<Account>::iterator it;
+    // TODO return data in alphabetical order.
+    set<Account*>::iterator it;
     for (it = m_book.begin(); it != m_book.end(); ++it)
     {
-        stream << (*it).getWebsite();
+        stream << (**it).getWebsite();
     }
+}
+
+Account*
+AccountsBook::getAccountPointer(const uint32_t accountKey)
+{
+    set<Account*>::iterator it;
+    // TODO create a functor for that action instead.
+    for (it = m_book.begin(); it != m_book.end(); ++it)
+    {
+        if ((**it).getKey() == accountKey)
+        {
+            return *it;
+        }
+    }
+    throw string("Account " + to_string(accountKey) + " not found");
+}
+
+Account*
+AccountsBook::getAccountPointer(const string website)
+{
+    set<Account*>::iterator it;
+    // TODO create a functor for that action instead.
+    for (it = m_book.begin(); it != m_book.end(); ++it)
+    {
+        if ((**it).getWebsite() == website)
+        {
+            return *it;
+        }
+    }
+    throw string("Account " + website + " not found");
 }
 
 ostream& operator<< (ostream& os, const AccountsBook& accountBook)
