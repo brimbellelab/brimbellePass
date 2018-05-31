@@ -1,5 +1,7 @@
 #include "account.h"
 
+#include <iostream>
+
 using namespace std;
 
 class sortAccountsByKey
@@ -57,7 +59,7 @@ Account::Account(uint32_t key,
         list<string> logins,
         string currentPassword,
         list<string> oldPasswords,
-        list<pair<string, string> > safetyQA,
+        std::vector<std::pair<string, string> > safetyQA,
         list<string> misc)
 {
     m_key = key;
@@ -111,6 +113,36 @@ Account::addSafetyQA(string question, string answer)
 }
 
 
+void
+Account::addSafetyQuestion(const uint8_t id, std::string question)
+{
+    if (id >= m_safetyQA.capacity())
+    {
+        // When m_safetyQA is resized, pairs need to be allocated and filled in the appended cells.
+        m_safetyQA.resize(id + 1, make_pair("", ""));
+        cout << "Resizing m_safetyQA from addSafetyQuestion" << endl;
+    }
+    cout << "Add safety question #" << unsigned(id) << ": " << question << endl;
+    m_safetyQA[id].first.assign(question);
+}
+
+
+
+void
+Account::addSafetyAnswer(const uint8_t id, const string answer)
+{
+    if (id >= m_safetyQA.capacity())
+    {
+        // When m_safetyQA is resized, pairs need to be allocated and filled in the appended cells.
+        m_safetyQA.resize(id + 1, make_pair("", ""));
+        cout << "Resizing m_safetyQA from addSafetyAnswer" << endl;
+    }
+    cout << "Add safety answer #" << unsigned(id) << ": " << answer << endl;
+    m_safetyQA[id].second.assign(answer);
+}
+
+
+
 
 void
 Account::addMisc(string misc)
@@ -160,7 +192,7 @@ Account::getOldPasswords(void) const
 
 
 
-list<pair<string, string> >
+vector<pair<string, string> >
 Account::getSafetyQA(void) const
 {
     return m_safetyQA;

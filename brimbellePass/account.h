@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 #include <utility>
+#include <vector>
 
 class Account
 {
@@ -20,7 +21,7 @@ public:
             std::list<std::string> logins,
             std::string currentPassword,
             std::list<std::string> oldPasswords,
-            std::list<std::pair<std::string, std::string> > safetyQA,
+            std::vector<std::pair<std::string, std::string> > safetyQA,
             std::list<std::string> misc);
 
     void addLogin(std::string newLogin);
@@ -28,6 +29,8 @@ public:
     void addOldPassword(std::string oldPassword);
     void changeCurrentPassword(std::string newPassword);
     void addSafetyQA(std::string question, std::string answer);
+    void addSafetyQuestion(const uint8_t id, const std::string question);
+    void addSafetyAnswer(const uint8_t id, const std::string answer);
     void addMisc(std::string misc);
     Account& operator=(const Account& other);
 
@@ -36,7 +39,7 @@ public:
     std::string getWebsite(void) const;
     std::string getCurrentPassword(void) const;
     std::list<std::string> getOldPasswords(void) const;
-    std::list<std::pair<std::string, std::string>> getSafetyQA(void) const;
+    std::vector<std::pair<std::string, std::string>> getSafetyQA(void) const;
     std::list<std::string> getMisc(void) const;
 
 private:
@@ -45,7 +48,7 @@ private:
     std::list<std::string> m_logins;
     std::string m_currentPassword;
     std::list<std::string> m_oldPasswords;
-    std::list<std::pair<std::string, std::string>> m_safetyQA;
+    std::vector<std::pair<std::string, std::string> > m_safetyQA;
     std::list<std::string> m_misc;
 };
 

@@ -56,6 +56,13 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
                     string login = entryChild.firstChild().toText().data().toStdString();
                     account->addLogin(login);
                 }
+                else if(entryChild.tagName() == "safetyQuestionAnswer")
+                {
+                    auto index = entryChild.attribute("index", "0").toUInt();
+                    string safetyQuestion = entryChild.firstChild().toText().data().toStdString();
+                    cout << "Safety question " << index << ": " << safetyQuestion << endl;
+                    account->addSafetyQuestion(index, safetyQuestion);
+                }
                 else if(entryChild.tagName() == "misc")
                 {
                     string misc = entryChild.firstChild().toText().data().toStdString();
@@ -102,7 +109,13 @@ AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &x
                         string oldPwd = entryChild.firstChild().toText().data().toStdString();
                         account->addOldPassword(oldPwd);
                     }
-                    //else if(entryChild.tagName() == "safetyQuestionAnswer") // TODO
+                    else if(entryChild.tagName() == "safetyQuestionAnswer")
+                    {
+                        auto index = entryChild.attribute("index", "0").toUInt();
+                        string safetyAnswer = entryChild.firstChild().toText().data().toStdString();
+                        cout << "Safety answer " << index << ": " << safetyAnswer << endl;
+                        account->addSafetyAnswer(index, safetyAnswer);
+                    }
                     else
                     {
                         cout << "tagname not handled yet: " << entryChild.tagName().toStdString() << endl;
