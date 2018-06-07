@@ -13,6 +13,10 @@ TARGET = brimbellePass
 TEMPLATE = app
 CONFIG += c++11
 
+INCLUDEPATH += "/usr/local/opt/openssl/include/"
+
+LIBS += -L"/usr/local/opt/openssl/lib" -lcrypto
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     displayentrytab.cpp \
@@ -24,7 +28,8 @@ SOURCES += main.cpp\
     accountsbook.cpp \
     xmldom.cpp \
     xmlinputfilesource.cpp \
-    configfile.cpp
+    configfile.cpp \
+    cipher.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -36,7 +41,8 @@ HEADERS  += mainwindow.h \
     accountsbook.h \
     xmldom.h \
     xmlinputfilesource.h \
-    configfile.h
+    configfile.h \
+    cipher.h
 
 RESOURCES += \
     resources.qrc

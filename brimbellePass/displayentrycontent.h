@@ -2,6 +2,7 @@
 #define DISPLAYENTRYCONTENT_H
 
 #include "account.h"
+#include "cipher.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -53,6 +54,7 @@ private:
     PasswordEntryLine *safetyAnswer;
     QTextEdit *textEditMisc;
     QPushButton *btnEditEntry;
+    Cipher cipherEngine;
 };
 
 #endif // DISPLAYENTRYCONTENT_H

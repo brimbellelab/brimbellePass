@@ -6,6 +6,22 @@ using namespace std;
 
 DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 {
+    // Data will be encrypted until it arrives in this window, so it's a good place to test the cipher functions!
+    // Example passwords.
+//    cipherEngine.setPassword("Dimebag");
+//    cipherEngine.setPassword("azertyuiopqsdfghjklmwxcvbnazertyuiopqsdfghjklmwxcvbn");
+    // Example strings to encrypt.
+//    QByteArray pwdCyphered = cipherEngine.encrypt("P455w0rd-P455w0rd-P455w0rd-P455w0rd-P455w0rd-P455w0rd-P455w0rd");
+//    QByteArray pwdCyphered = cipherEngine.encrypt("Top secret information");
+//    QByteArray pwdCyphered = cipherEngine.encrypt("XT"); // OK
+//    QByteArray pwdCyphered = cipherEngine.encrypt("X"); // OK
+//    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789ABCDEF"); // NOT OK
+    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789012345"); // NOT OK
+//    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789ABCDEF0123456789ABCDEF"); // NOT OK
+//    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789ABCDEFG"); //OK
+    cipherEngine.decrypt(pwdCyphered);
+
+
     lineEditWebsite = new QLineEdit("No account found");
 
     gbLogins = new QGroupBox("Logins", this);
