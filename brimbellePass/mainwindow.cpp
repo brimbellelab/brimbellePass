@@ -18,9 +18,11 @@ MainWindow::MainWindow() : QTabWidget()
     displayEntryTab = new DisplayEntryTab(accountsBook, this);
     addEntryTab = new AddEntryTab();
     configurationTab = new ConfigurationTab(confFile);
+    infoTab = new InfoTab();
     this->addTab(displayEntryTab, "Main");
     this->addTab(addEntryTab, "Add");
     this->addTab(configurationTab, "Parameters");
+    this->addTab(infoTab, "Info");
 }
 
 
@@ -30,5 +32,6 @@ MainWindow::~MainWindow()
     delete displayEntryTab;
     delete configurationTab;
     delete addEntryTab;
+    delete infoTab;
     delete accountsBook;
 }

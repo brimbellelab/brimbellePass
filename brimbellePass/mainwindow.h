@@ -12,6 +12,7 @@
 #include "configfile.h"
 #include "configurationtab.h"
 #include "displayentrytab.h"
+#include "infotab.h"
 
 class MainWindow : public QTabWidget
 {
@@ -22,11 +23,12 @@ public:
     ~MainWindow();
 
 private:
-    AccountsBook *accountsBook;
-    ConfigFile *confFile;
-    DisplayEntryTab *displayEntryTab;
-    AddEntryTab *addEntryTab;
-    ConfigurationTab *configurationTab;
+    AccountsBook* accountsBook;
+    ConfigFile* confFile;
+    DisplayEntryTab* displayEntryTab;
+    AddEntryTab* addEntryTab;
+    ConfigurationTab* configurationTab;
+    InfoTab* infoTab;
 };
 
 #endif // MAINWINDOW_H

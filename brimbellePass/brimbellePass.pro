@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     xmldom.cpp \
     xmlinputfilesource.cpp \
     configfile.cpp \
-    cipher.cpp
+    cipher.cpp \
+    infotab.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -42,7 +43,8 @@ HEADERS  += mainwindow.h \
     xmldom.h \
     xmlinputfilesource.h \
     configfile.h \
-    cipher.h
+    cipher.h \
+    infotab.h
 
 RESOURCES += \
     resources.qrc
