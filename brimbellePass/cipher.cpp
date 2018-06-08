@@ -84,7 +84,7 @@ Cipher::Cipher()
     // The key must have a fixed size of 32 bytes and is initially filled with '0'.
     // Later, its content will be replaced with the actual password for as many bytes as possible.
     std::memset(aesKey, '0', KEY_SIZE);
-    key = "";
+    mainUserPassword = "";
 }
 
 
@@ -103,80 +103,64 @@ Cipher::Cipher(QString mainPassword)
 void
 Cipher::setPassword(const QString &mainPassword)
 {
-    key = QString(mainPassword);
+    mainUserPassword = QString(mainPassword);
 
     // Load the necessary cipher.
     EVP_add_cipher(EVP_aes_256_cbc());
 
-    std::cout << "KEY SIZE: " << int(KEY_SIZE) << ", password size: " << mainPassword.size() << std::endl;
-
     // aesKey memory has already been prepared, now injecting the password at the beginning for as many bytes as
     // possible.
-    std::memcpy(aesKey, key.toStdString().c_str(), qMin(int(KEY_SIZE), mainPassword.size()));
-
-    // Dump key for debug.
-    for (size_t i = 0; i < KEY_SIZE; i++)
-    {
-        std::cout << aesKey[i];
-    }
-    std::cout << std::endl;
-
-    // Dump IV for debug.
-    for (size_t i = 0; i < BLOCK_SIZE; i++)
-    {
-        std::cout << iv[i];
-    }
-    std::cout << std::endl;
+    std::memcpy(aesKey, mainUserPassword.toStdString().c_str(), qMin(int(KEY_SIZE), mainPassword.size()));
 }
 
 
 
-QByteArray
-Cipher::encrypt(QByteArray input)
+QString
+Cipher::encrypt(QString input)
 {
-    std::cout << "ENCRYPTING" << std::endl;
-    secure_string ctext;
-    // secure_string ptext = input.toStdString().c_str();
-    secure_string ptext = input.data();
+    secure_string cryptedText;
+    secure_string plainText = input.toUtf8().data();
 
     // Dump original plain string.
-    std::cout << "ptext initialized with " << ptext.size() << " bytes string: " << std::endl;
-    for (size_t i = 0; i < ptext.size(); i++)
+    std::cout << "plainText initialized with " << plainText.size() << " bytes string: " << std::endl;
+    for (size_t i = 0; i < plainText.size(); i++)
     {
-        std::cout << ptext[i];
+        std::cout << plainText[i];
     }
     std::cout << std::endl;
 
-    std::cout << "size of plain char*: " << (int)ptext.size() << std::endl;
+    std::cout << "size of plain char*: " << (int)plainText.size() << std::endl;
 
+    // Create the EVP_CIPHER_CTX object needed for encrypting.
     std::unique_ptr<EVP_CIPHER_CTX, decltype(&::EVP_CIPHER_CTX_free)> ctx(EVP_CIPHER_CTX_new(), EVP_CIPHER_CTX_free);
+
     int returnCode = EVP_EncryptInit_ex(ctx.get(), EVP_aes_256_cbc(), NULL, aesKey, iv);
     if (returnCode != 1)
       throw std::runtime_error("EVP_EncryptInit_ex failed");
 
     // Cipher text expands upto BLOCK_SIZE.
-    ctext.resize(ptext.size() + BLOCK_SIZE);
-    int out_len1 = (int)ctext.size();
+    cryptedText.resize(plainText.size() + BLOCK_SIZE);
+    int out_len1 = (int)cryptedText.size();
 
     returnCode = EVP_EncryptUpdate(ctx.get(),
-                           (unsigned char*)&ctext[0],
+                           (unsigned char*)&cryptedText[0],
                             &out_len1,
-                            (const unsigned char*)&ptext[0],
-                            (int)ptext.size());
+                            (const unsigned char*)&plainText[0],
+                            (int)plainText.size());
     if (returnCode != 1)
     {
         throw std::runtime_error("EVP_EncryptUpdate failed");
     }
 
-    int out_len2 = (int)ctext.size() - out_len1;
-    returnCode = EVP_EncryptFinal_ex(ctx.get(), (unsigned char*)&ctext[0] + out_len1, &out_len2);
+    int out_len2 = (int)cryptedText.size() - out_len1;
+    returnCode = EVP_EncryptFinal_ex(ctx.get(), (unsigned char*)&cryptedText[0] + out_len1, &out_len2);
     if (returnCode != 1)
     {
         throw std::runtime_error("EVP_EncryptFinal_ex failed");
     }
 
     // Set cipher text size now that we know it.
-    ctext.resize(out_len1 + out_len2);
+    cryptedText.resize(out_len1 + out_len2);
 
     // Dump ciphered string and assign result.
     QByteArray result;
@@ -184,39 +168,41 @@ Cipher::encrypt(QByteArray input)
     std::cout << std::hex <<  std::setw(2);
     for (int i = 0; i < out_len1 + out_len2; i++)
     {
-        std::cout  << std::setfill('0') << "0x" << (static_cast<unsigned short>(ctext[i]) & 0xFF) << " ";
-        result.append(ctext[i]);
+        std::cout  << std::setfill('0') << "0x" << (static_cast<unsigned short>(cryptedText[i]) & 0xFF) << " ";
+        result.append(cryptedText[i]);
     }
     std::cout << std::dec << std::endl;
 
     EVP_CIPHER_CTX_cleanup(ctx.get()); // Should be call when done to remove sensitive information from memory.
 
-    return result;
+    return result.toBase64();
 }
 
 
 
-QByteArray
-Cipher::decrypt(QByteArray input)
+QString
+Cipher::decrypt(QString inputString)
 {
-    std::cout << "DECRYPTING" << std::endl;
-    secure_string ptext;
-    secure_string ctext;
-    ctext.resize(input.size());
-    ctext = input.data();
-    // It's necessary to resize one more time ctext in case input ends with a \0 or the size will be wrong.
-    ctext.resize(input.size());
+    // Conversion of the UTF8 Base64 string to a QByteArray, easier to handle.
+    QByteArray input = QByteArray::fromBase64(inputString.toUtf8());
+    secure_string plainText;
+    secure_string cryptedText;
+    cryptedText.resize(input.size());
+    memcpy(&cryptedText[0], input.data(), input.size());
+
     std::cout << "input qbyte array is " << input.size() << " bytes" << std::endl;
     // Dump ciphered string.
-    std::cout << "ctext initialized with " << ctext.size() << " bytes string: " << std::endl;
+    std::cout << "cryptedText initialized with " << cryptedText.size() << " bytes string: " << std::endl;
     std::cout << std::hex;
-    for (size_t i = 0; i < ctext.size(); i++)
+    for (size_t i = 0; i < cryptedText.size(); i++)
     {
-        std::cout << "0x"<< (static_cast<unsigned short>(ctext[i]) & 0xFF) << " ";
+        std::cout << "0x"<< (static_cast<unsigned short>(cryptedText[i]) & 0xFF) << " ";
     }
     std::cout << std::dec << std::endl;
 
+    // Create the EVP_CIPHER_CTX object needed for decrypting.
     std::unique_ptr<EVP_CIPHER_CTX, decltype(&::EVP_CIPHER_CTX_free)> ctx(EVP_CIPHER_CTX_new(), EVP_CIPHER_CTX_free);
+
     int returnCode = EVP_DecryptInit_ex(ctx.get(), EVP_aes_256_cbc(), NULL, aesKey, iv);
     if (returnCode != 1)
     {
@@ -224,27 +210,29 @@ Cipher::decrypt(QByteArray input)
     }
 
     // Plain text buffer must be the length of the ciphered string + BLOCK_SIZE.
-    ptext.resize(ctext.size() + BLOCK_SIZE);
+    plainText.resize(cryptedText.size() + BLOCK_SIZE);
 
-    int out_len1 = (int)ptext.size();
+    int out_len1 = (int)plainText.size();
 
-    std::cout << "ptext.size = " << out_len1 << ", ctext.size = " << ctext.size() << std::endl;
+    std::cout << "plainText.size = " << out_len1 << ", cryptedText.size = " << cryptedText.size() << std::endl;
 
     returnCode = EVP_DecryptUpdate(ctx.get(),
-                           (unsigned char*)&ptext[0],
+                           (unsigned char*)&plainText[0],
                            &out_len1,
-                           (const unsigned char*)&ctext[0],
-                           (int)ctext.size());
+                           (const unsigned char*)&cryptedText[0],
+                           (int)cryptedText.size());
     if (returnCode != 1)
     {
         throw std::runtime_error("EVP_DecryptUpdate failed");
     }
 
-    int out_len2 = (int)ptext.size() - out_len1;
-    std::cout  << "Size of ptext: " << ptext.size() << ", outlen1 is " << out_len1 << "; outlen2 is " << out_len2 << std::endl;
+    int out_len2 = (int)plainText.size() - out_len1;
+    std::cout  << "Size of plainText: " << plainText.size()
+               << ", outlen1 is " << out_len1
+               << "; outlen2 is " << out_len2 << std::endl;
 
     returnCode = EVP_DecryptFinal_ex(ctx.get(),
-                             (unsigned char*)&ptext[0] + out_len1,
+                             (unsigned char*)&plainText[0] + out_len1,
                              &out_len2); // Just here to receive the result, it's not read within EVP_DecryptFinal.
     if (returnCode != 1)
     {
@@ -253,19 +241,19 @@ Cipher::decrypt(QByteArray input)
     }
 
     // Set plain text size now that we know it.
-    ptext.resize(out_len1 + out_len2);
+    plainText.resize(out_len1 + out_len2);
 
     // Dump plain string and assign it to result.
     QByteArray result;
     std::cout << " Decyphered to " << out_len1 + out_len2 << "bytes:" << std::endl;
-    for (size_t i = 0; i < ptext.size(); i++)
+    for (size_t i = 0; i < plainText.size(); i++)
     {
-        std::cout << ptext[i];
-        result.append(ptext[i]);
+        std::cout << plainText[i];
+        result.append(plainText[i]);
     }
     std::cout << std::endl;
 
     EVP_CIPHER_CTX_cleanup(ctx.get()); // Should be call when done to remove sensitive information from memory.
 
-    return result;
+    return QString(result);
 }

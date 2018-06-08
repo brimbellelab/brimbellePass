@@ -1,26 +1,16 @@
 #include "displayentrycontent.h"
 
+#include <iostream>
+
+#include <QMessageBox>
 #include <QVBoxLayout>
 
 using namespace std;
 
 DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 {
-    // Data will be encrypted until it arrives in this window, so it's a good place to test the cipher functions!
-    // Example passwords.
-//    cipherEngine.setPassword("Dimebag");
-//    cipherEngine.setPassword("azertyuiopqsdfghjklmwxcvbnazertyuiopqsdfghjklmwxcvbn");
-    // Example strings to encrypt.
-//    QByteArray pwdCyphered = cipherEngine.encrypt("P455w0rd-P455w0rd-P455w0rd-P455w0rd-P455w0rd-P455w0rd-P455w0rd");
-//    QByteArray pwdCyphered = cipherEngine.encrypt("Top secret information");
-//    QByteArray pwdCyphered = cipherEngine.encrypt("XT"); // OK
-//    QByteArray pwdCyphered = cipherEngine.encrypt("X"); // OK
-//    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789ABCDEF"); // NOT OK
-    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789012345"); // NOT OK
-//    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789ABCDEF0123456789ABCDEF"); // NOT OK
-//    QByteArray pwdCyphered = cipherEngine.encrypt("0123456789ABCDEFG"); //OK
-    cipherEngine.decrypt(pwdCyphered);
-
+    // No panic, it's just for the demo. I'll add an input box to let the user enter the actual password.
+    cipherEngine.setPassword("GUEST");
 
     lineEditWebsite = new QLineEdit("No account found");
 
@@ -133,22 +123,32 @@ DisplayEntryContent::update(const Account *account)
             layoutLogins->addWidget(entryLineLogins.back());
         }
     }
-    entryLineCurrentPassword->setText(QString::fromStdString(currentAccount.getCurrentPassword()));
-
-    // Fill old passwords infos.
-    if (!currentAccount.getOldPasswords().empty())
+    try
     {
-        // Iterator on the password list from account.
-        list<string>::iterator oldPwd;
-        list<string> tempList = currentAccount.getOldPasswords();
-        for (oldPwd = tempList.begin(); oldPwd != tempList.end(); ++oldPwd)
-        {
-            entryLineOldPasswords.push_back(new PasswordEntryLine(QString::fromStdString(*oldPwd)));
-            layoutOldPasswords->addWidget((entryLineOldPasswords.back()));
-        }
-    }
-    //TODO: a call to generate() would probably be better?
+        entryLineCurrentPassword->setText(
+                    cipherEngine.decrypt(QString::fromStdString(currentAccount.getCurrentPassword())));
 
+        // Fill old passwords infos.
+        if (!currentAccount.getOldPasswords().empty())
+        {
+            // Iterator on the password list from account.
+            list<string>::iterator oldPwd;
+            list<string> tempList = currentAccount.getOldPasswords();
+            for (oldPwd = tempList.begin(); oldPwd != tempList.end(); ++oldPwd)
+            {
+                entryLineOldPasswords.push_back
+                        (new PasswordEntryLine(cipherEngine.decrypt(QString::fromStdString(*oldPwd))));
+                layoutOldPasswords->addWidget((entryLineOldPasswords.back()));
+            }
+        }
+        //TODO: a call to generate() would probably be better?
+    }
+    catch (std::runtime_error re)
+    {
+        // Something went wrong while deciphering a password. The ciphered string doesn't match the password!
+        cout << re.what() << endl;
+        QMessageBox::warning(this, "Error", "Incorrect password!");
+    }
     // Fill safety questions infos.
     if (!currentAccount.getSafetyQuestions().empty())
     {
@@ -197,5 +197,13 @@ DisplayEntryContent::updateSafetyAnswerField(const int index)
         safetyAnswer->setText("");
         return;
     }
-    safetyAnswer->setText(QString::fromStdString(currentAccount.getSafetyAnswer(index)));
+    try
+    {
+        safetyAnswer->setText(cipherEngine.decrypt(QString::fromStdString(currentAccount.getSafetyAnswer(index))));
+    }
+    catch (std::runtime_error re)
+    {
+        // No need to display a message box asking for the password again.
+        cout << re.what() << endl;
+    }
 }
