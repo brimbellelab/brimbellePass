@@ -1,0 +1,11 @@
+<!ELEMENT pwdList (entree*)>
+
+<!ELEMENT entry (password, oldPassword*, safetyAnswer*, misc*)>
+<!-- The key to bind every entry with the matching logins entry-->
+<!ATTLIST entry id CDATA #REQUIRED)>
+
+<!ELEMENT password (#PCDATA)>
+<!ELEMENT oldPassword (#PCDATA)>
+<!ELEMENT safetyAnswer (#PCDATA)>
+<!ATTLIST safetyAnswer index CDATA #REQUIRED)>
+<!ELEMENT misc (#PCDATA)>

@@ -1,0 +1,18 @@
+<!ELEMENT loginList (entree*)>
+
+<!ELEMENT entry (login+, safetyQuestion*, misc*)>
+<!-- The key to bind every entry with the matching password entry-->
+<!ATTLIST entry id CDATA #REQUIRED)>
+<!-- The account name, typically the website-->
+<!ATTLIST entry website CDATA #REQUIRED)>
+
+<!-- There can be several login. Account number, e-mail address, phone, et>
+<!ELEMENT login (#PCDATA)>
+<!ATTLIST login type CDATA)>
+
+<!-- In case there are safety questions to recover the account.
+<!ELEMENT safetyQuestion (#PCDATA)>
+<!ATTLIST safetyQuestion index CDATA #REQUIRED)>
+
+<!-- Miscellanies field for comments -->
+<!ELEMENT misc (#PCDATA)>

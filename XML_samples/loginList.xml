@@ -1,0 +1,33 @@
+<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?>
+
+<!DOCTYPE loginList SYSTEM "loginList.dtd">
+
+<loginList>
+    <entry id = "1" website = "mybank.com">
+        <login type="email">john.doe@gmail.com</login>
+        <login type="accountNumber">123456789</login>
+        <misc>Do not access from abroad or it will lock my account!</misc>
+    </entry>
+    <entry id = "2" website = "amazon.com">
+        <login type="email">john.doe@gmail.com</login>
+        <safetyQuestion index="0">Maiden name of your mother</safetyQuestion>
+        <safetyQuestion index="1">Model of your first car</safetyQuestion>
+        <safetyQuestion index="2">What street did you grow up</safetyQuestion>
+        <misc>It's also my kindle account</misc>
+    </entry>
+    <entry id = "3" website = "mail.google.com">
+        <login type="email">john.doe@gmail.com</login>
+        <login type="phoneNumber">+1(234)567-8910</login>
+        <safetyQuestion index="0">Maiden name of your mother</safetyQuestion>
+        <safetyQuestion index="1">Model of your first car</safetyQuestion>
+        <safetyQuestion index="2">What street did you grow up</safetyQuestion>
+        <misc>It unlocks all Google features :)</misc>
+    </entry>
+    <entry id = "4" website = "IMDB">
+        <login type="email">john.doe@gmail.com</login>
+        <login type="phoneNumber">+1(234)567-8910</login>
+        <safetyQuestion index="0">What... is your name?</safetyQuestion>
+        <safetyQuestion index="1">What... is your quest?</safetyQuestion>
+        <safetyQuestion index="2">What... is the air-speed velocity of an unladen swallow?</safetyQuestion>
+    </entry>
+</loginList>
