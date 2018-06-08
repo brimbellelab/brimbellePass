@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QVBoxLayout>
 
@@ -14,7 +15,14 @@ using namespace std;
 DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 {
     // No panic, it's just for the demo. I'll add an input box to let the user enter the actual password.
-    cipherEngine.setPassword("GUEST");
+    //cipherEngine.setPassword("GUEST");
+    bool ok = false;
+    cipherEngine.setPassword(QInputDialog::getText(this,
+                                                   "Enter password",
+                                                   "Enter the main user password",
+                                                   QLineEdit::Password,
+                                                   QString(),
+                                                   &ok));
 
     lineEditWebsite = new QLineEdit("No account found");
 
