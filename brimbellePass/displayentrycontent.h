@@ -1,3 +1,7 @@
+// DisplayEntryContent.h - BrimbellePass, a split-database password manager. github.com/brimbellelab/brimbellepass
+// Copyright (C) 2018, by Landry COLLET for BrimbelleLab.
+// Released under the GNU General Public License v3, see https://www.gnu.org/licenses.
+
 #ifndef DISPLAYENTRYCONTENT_H
 #define DISPLAYENTRYCONTENT_H
 
