@@ -32,15 +32,18 @@ public:
     /// @note accountToSave must have its key parameter set prior to be passed to the function.
     void saveChanges(Account &accountToSave);
 
+    /// Retrieve the current AccountKey.
+    /// @note Make sure that there is actually a meaningful account loaded before calling.
     uint32_t getCurrentAccountKey(void);
+
+    /// Erase content of all fields.
+    void clearContent(void);
 
 signals:
 
 public slots:
     /// Trigger the UI to move the "current password" to "old passwords" and generate a new one.
     void changePassword(void);
-
-
 
     // Update the content of the safety answer field.
     // @param[in] index Index of the safety answer to be loaded.

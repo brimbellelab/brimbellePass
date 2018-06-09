@@ -56,6 +56,11 @@ DisplayEntryTab::DisplayEntryTab(AccountsBook *accounts, QWidget *parent) : QWid
 void
 DisplayEntryTab::reloadEntryContent(const QString& text)
 {
+    if (text.isEmpty())
+    {
+        displayEntryContent->clearContent();
+        return;
+    }
     try
     {
         // This function can throw an error if the password is incorrect.
@@ -71,6 +76,10 @@ DisplayEntryTab::reloadEntryContent(const QString& text)
         btnSaveAccount->setEnabled(false);
         btnDeleteAccount->setEnabled(false);
     }
+    catch (std::string e)
+    {
+        QMessageBox::warning(this, "Error", QString::fromStdString(e));
+    }
 }
 
 
@@ -78,7 +87,6 @@ DisplayEntryTab::reloadEntryContent(const QString& text)
 void
 DisplayEntryTab::saveDatabase(void)
 {
-    // TODO deactivate if password is incorrect.
     QMessageBox::warning(this, "Oopsie", "It's not yet possible to save the database.");
 }
 
@@ -134,6 +142,29 @@ DisplayEntryTab::saveAccount(void)
 void
 DisplayEntryTab::deleteAccount(void)
 {
-    // TODO deactivate if password is incorrect.
-    QMessageBox::warning(this, "Oopsie", "It's not yet possible to delete an account.");
+    uint32_t currentAccountKey = displayEntryContent->getCurrentAccountKey();
+
+    if (QMessageBox::question(this, "Delete?", "Are you sure you want to delete this account?") == QMessageBox::No)
+    {
+        // Abort.
+        return;
+    }
+
+    accountsBook->deleteAccount(currentAccountKey);
+
+//    comboBoxAccountsList->blockSignals(true); // Signals must be paused for a while or they're triggered when cleared.
+
+    // Remove entry from the combobox list.
+    auto indexEntry = comboBoxAccountsList->currentIndex();
+
+    if (comboBoxAccountsList->count() <= 1)
+    {
+        QMessageBox::warning(this, "", "Accounts list is empty.");
+        comboBoxAccountsList->blockSignals(false);
+        btnSaveAccount->setEnabled(false);
+        btnDeleteAccount->setEnabled(false);
+    }
+
+    std::cout << "Loading item " << indexEntry << std::endl;
+    comboBoxAccountsList->removeItem(indexEntry);
 }

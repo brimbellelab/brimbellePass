@@ -76,9 +76,9 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 
 
 void
-DisplayEntryContent::update(const Account *account)
+DisplayEntryContent::clearContent(void)
 {
-    // Start with cleaning the previous content.
+    lineEditWebsite->setText("");
 
     // Clean 'Logins' fields.
     if (!currentAccount.getLogins().empty())
@@ -92,6 +92,8 @@ DisplayEntryContent::update(const Account *account)
         }
     }
     entryLineLogins.clear();
+
+    entryLineCurrentPassword->setText("");
 
     // Clean 'oldPwd' field.
     if (!currentAccount.getOldPasswords().empty())
@@ -111,6 +113,15 @@ DisplayEntryContent::update(const Account *account)
 
     // Clean 'misc' field.
     textEditMisc->clear();
+}
+
+
+
+void
+DisplayEntryContent::update(const Account *account)
+{
+    // Start with cleaning the previous content.
+    clearContent();
 
     // Bind the content of this page with the new account infos.
     currentAccount = *account;
