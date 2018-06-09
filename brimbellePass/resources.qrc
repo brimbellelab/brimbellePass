@@ -2,5 +2,6 @@
     <qresource prefix="/icons">
         <file>clipboardIco24.png</file>
         <file>clipboardIco48.png</file>
+        <file>brimbellePass.icns</file>
     </qresource>
 </RCC>

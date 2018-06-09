@@ -17,6 +17,10 @@ INCLUDEPATH += "/usr/local/opt/openssl/include/"
 
 LIBS += -L"/usr/local/opt/openssl/lib" -lcrypto
 
+macx{
+ICON = brimbellePass.icns
+}
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     displayentrytab.cpp \
@@ -48,3 +52,4 @@ HEADERS  += mainwindow.h \
 
 RESOURCES += \
     resources.qrc
+

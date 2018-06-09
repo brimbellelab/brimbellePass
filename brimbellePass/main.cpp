@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
+    qApp->setWindowIcon(QIcon(":icons/brimbellePass.icns"));
 
     MainWindow w;
     w.show();

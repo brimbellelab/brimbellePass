@@ -18,7 +18,7 @@ This software is distributed AS IS, with no warranty expressed or implied.
 BrimbellePass is born from my frustration of dealing with hundreds of password on a daily basis. And a light paranoia
 about computer security.
 
-There are plenty of solutions available, but none seems to match my requirements.
+There are plenty of solutions available, but none seems to match my requirements, which are:
 - AES256 encryption of passwords and "safety answers".
 - No storage of password on untrusted remote servers.
 - No plugins embedded in web browser.
@@ -89,10 +89,11 @@ Default password associated with these files is `GUEST`.
 ## Road map
 
 Here are the next features to be developed. Feel free to help and contribute if you're interested!
-- add an entry.
-- modify an entry and save the changes to the XML file.
+- add an Account entry from the GUI.
+- modify an entry from the GUI and save the changes to the XML file.
 - create empty logins/passwords XML files.
-- shuffle entries id, for when one of the file has been compromised.
+- translation to French.
+- shuffle entries id, for when one of the database files has been compromised.
 - export the database to a csv file (or even xml file), without encryption, human readable.
 - modify the main password, which implies to decipher all encrypted data and re-encrypt everything with the new key.
 - import CSV files.
