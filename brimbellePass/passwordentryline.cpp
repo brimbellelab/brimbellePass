@@ -51,6 +51,14 @@ PasswordEntryLine::setText(const QString text)
 
 
 
+QString
+PasswordEntryLine::text(void)
+{
+    return lineEditPassword.text();
+}
+
+
+
 void
 PasswordEntryLine::setFieldAsPassword(bool hide)
 {

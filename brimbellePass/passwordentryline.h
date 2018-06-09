@@ -19,6 +19,7 @@ public:
     explicit PasswordEntryLine();
     explicit PasswordEntryLine(const QString password, QWidget *parent = 0);
     void setText(const QString text);
+    QString text(void);
 
 signals:
 

@@ -6,6 +6,7 @@
 #define DISPLAYENTRYTAB_H
 
 #include <QComboBox>
+#include <QPushButton>
 #include <QString>
 #include <QWidget>
 
@@ -23,9 +24,17 @@ signals:
 public slots:
     void reloadEntryContent(const QString& text);
 
+private slots:
+    void saveDatabase(void);
+    void saveAccount(void);
+    void deleteAccount(void);
+
 private:
     QComboBox *comboBoxAccountsList;
     DisplayEntryContent *displayEntryContent;
+    QPushButton *btnSaveDatabase;
+    QPushButton *btnSaveAccount;
+    QPushButton *btnDeleteAccount;
     ///@note this can only be temporary as it should be possible to modify it from the other tabs...
     AccountsBook *accountsBook;
 };

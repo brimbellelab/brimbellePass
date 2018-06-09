@@ -27,14 +27,20 @@ public:
     explicit DisplayEntryContent(QWidget *parent = 0);
     void update(const Account *account);
 
+    /// Trigger the save of any changes made to this entry.
+    /// @param[in] accountToSave An account object that will be filled with the content of this entry.
+    /// @note accountToSave must have its key parameter set prior to be passed to the function.
+    void saveChanges(Account &accountToSave);
+
+    uint32_t getCurrentAccountKey(void);
+
 signals:
 
 public slots:
     /// Trigger the UI to move the "current password" to "old passwords" and generate a new one.
     void changePassword(void);
 
-    /// Trigger the save of any changes made to this entry.
-    void saveChanges(void);
+
 
     // Update the content of the safety answer field.
     // @param[in] index Index of the safety answer to be loaded.
@@ -57,7 +63,6 @@ private:
     QComboBox *comboBoxSafetyQuestion;
     PasswordEntryLine *safetyAnswer;
     QTextEdit *textEditMisc;
-    QPushButton *btnEditEntry;
     Cipher cipherEngine;
 };
 

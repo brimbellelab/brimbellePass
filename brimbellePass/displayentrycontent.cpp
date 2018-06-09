@@ -14,8 +14,6 @@ using namespace std;
 
 DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 {
-    // No panic, it's just for the demo. I'll add an input box to let the user enter the actual password.
-    //cipherEngine.setPassword("GUEST");
     bool ok = false;
     cipherEngine.setPassword(QInputDialog::getText(this,
                                                    "Enter password",
@@ -63,9 +61,6 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 
     textEditMisc = new QTextEdit();
 
-    btnEditEntry = new QPushButton("Save changes", this);
-    QObject::connect(btnEditEntry, SIGNAL(clicked()), this, SLOT(saveChanges()));
-
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(lineEditWebsite);
     layout->addWidget(gbLogins);
@@ -73,7 +68,6 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
     layout->addWidget(gbOldPasswords);
     layout->addWidget(gbSafetyQA);
     layout->addWidget(textEditMisc);
-    layout->addWidget(btnEditEntry);
     layout->setMargin(defaultMargin);
 
     this->setLayout(layout);
@@ -159,8 +153,10 @@ DisplayEntryContent::update(const Account *account)
     {
         // Something went wrong while deciphering a password. The ciphered string doesn't match the password!
         cout << re.what() << endl;
-        QMessageBox::warning(this, "Error", "Incorrect password!");
+        // Another exception is thrown so that the parent can deactivate the save/delete buttons.
+        throw QString("Incorrect password!");
     }
+
     // Fill safety questions infos.
     if (!currentAccount.getSafetyQuestions().empty())
     {
@@ -191,9 +187,53 @@ DisplayEntryContent::changePassword(void)
 
 
 void
-DisplayEntryContent::saveChanges(void)
+DisplayEntryContent::saveChanges(Account &accountToSave)
 {
-    ;//TODO
+
+    // TODO deactivate this function if password is incorrect.
+    // throw
+
+    // TODO: change website name as well.
+
+    // Save logins.
+    for (auto i = 0; i < entryLineLogins.count(); i++)
+    {
+        cout << "add login " << entryLineLogins[i]->text().toStdString() << endl;
+        accountToSave.addLogin(entryLineLogins[i]->text().toStdString());
+    }
+
+    // Save current password.
+    QString encryptedPassword = cipherEngine.encrypt(entryLineCurrentPassword->text());
+    accountToSave.setCurrentPassword(encryptedPassword.toStdString());
+    cout << "Current password set to " << encryptedPassword.toStdString()
+         << " (in clear: " << entryLineCurrentPassword->text().toStdString() << ")" << endl;
+
+    // Save old password.
+    for (auto i = 0; i < entryLineOldPasswords.count(); i++)
+    {
+        QString encryptedOldPassword = cipherEngine.encrypt(entryLineOldPasswords[i]->text());
+        accountToSave.addOldPassword(encryptedOldPassword.toStdString());
+        cout << "Adding an old password as " << encryptedOldPassword.toStdString()
+             << " (in clear: " << entryLineOldPasswords[i]->text().toStdString() << ")" << endl;
+    }
+
+    // Save Question/Answers.
+    // TODO
+
+    // Save Misc.
+    if (!textEditMisc->toPlainText().isEmpty())
+    {
+        cout << "Add misc : " << textEditMisc->toPlainText().toStdString() << endl;
+        accountToSave.addMisc(textEditMisc->toPlainText().toStdString());
+    }
+}
+
+
+
+uint32_t
+DisplayEntryContent::getCurrentAccountKey(void)
+{
+    return currentAccount.getKey();
 }
 
 

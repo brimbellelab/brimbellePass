@@ -26,8 +26,6 @@ XmlInputFileSource::XmlInputFileSource(const QString type, const QString path, Q
 
     layoutMain->addWidget(&lineEditPath);
     layoutMain->addWidget(&btnBrowse);
-
-    //this->setLayout(layout);
 }
 
 
@@ -54,7 +52,6 @@ XmlInputFileSource::browse(void)
 void
 XmlInputFileSource::updatePath(const QString &path)
 {
-    std::cout << "PATH Updated from " << strPath.toStdString() << " to " << path.toStdString() << std::endl;
     strPath = path;
 }
 
