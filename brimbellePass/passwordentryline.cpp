@@ -21,7 +21,6 @@ PasswordEntryLine::PasswordEntryLine()
 PasswordEntryLine::PasswordEntryLine(const QString password, QWidget *parent) : QWidget(parent)
 {
     strPassword = password;
-
     lineEditPassword.setText(strPassword);
     lineEditPassword.setEchoMode(QLineEdit::Password);
     lineEditPassword.setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);

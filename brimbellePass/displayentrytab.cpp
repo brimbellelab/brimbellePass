@@ -152,8 +152,6 @@ DisplayEntryTab::deleteAccount(void)
 
     accountsBook->deleteAccount(currentAccountKey);
 
-//    comboBoxAccountsList->blockSignals(true); // Signals must be paused for a while or they're triggered when cleared.
-
     // Remove entry from the combobox list.
     auto indexEntry = comboBoxAccountsList->currentIndex();
 
