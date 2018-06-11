@@ -9,7 +9,6 @@ QT       += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = brimbellePass
 TEMPLATE = app
 CONFIG += c++11
 
@@ -21,8 +20,24 @@ macx{
 ICON = brimbellePass.icns
 }
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
+test {
+    message("Test build")
+    QT += testlib
+    TARGET = UnitTests
+
+    SOURCES += tests/testcipher.cpp \
+    tests/testaccountsbook.cpp \
+    tests/testmain.cpp
+
+    HEADERS += tests/testcipher.h \
+    tests/testaccountsbook.h
+} else {
+    message("Normal build")
+    TARGET = brimbellePass
+    SOURCES += main.cpp
+}
+
+SOURCES += mainwindow.cpp \
     displayentrytab.cpp \
     displayentrycontent.cpp \
     passwordentryline.cpp \
