@@ -37,6 +37,14 @@ Account::Account(void)
 
 
 
+Account::Account(uint32_t key)
+{
+    m_key = key;
+    m_website = "Empty account";
+}
+
+
+
 Account::Account(uint32_t key, string website)
 {
     m_key = key;

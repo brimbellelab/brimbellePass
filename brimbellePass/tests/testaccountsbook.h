@@ -11,9 +11,11 @@
 class TestAccountsBook: public QObject
 {
     Q_OBJECT
+
 private slots:
     void deleteAccount(void);
     void addAccount(void);
+    void getAvailableKey(void);
 
 private:
     AccountsBook accountsBook;

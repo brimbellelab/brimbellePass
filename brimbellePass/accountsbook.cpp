@@ -16,21 +16,7 @@ using namespace std;
 
 AccountsBook::AccountsBook(void)
 {
-    // For now, just some dummy content in the combobox.
-    Account* amazon = new Account(0, "Amazon", "johndoe@gmail.com", "abcdef");
-    amazon->addLogin("johndoe");
-    Account* bank = new Account(1, "Bank", "johndoe@gmail.com", "azerty");
-    Account* banned = new Account(2, "Banned", "johndoe@gmail.com", "qsdfg");
-    Account* irs = new Account(3, "IRS", "johndoe@gmail.com", "wxcvb");
-    irs->addOldPassword("tooSimple");
-    irs->addOldPassword("StillTooSimple");
-    irs->addMisc("I'd like them to forget I exist so that I don't have to pay!");
-    irs->addMisc("Last year return: $200");
-
-    this->addAccount(amazon);
-    this->addAccount(bank);
-    this->addAccount(banned);
-    this->addAccount(irs);
+    ;
 }
 
 AccountsBook::AccountsBook(const std::string &xmlFileLogin, const std::string &xmlFilePassword)
@@ -206,6 +192,20 @@ AccountsBook::getWebsiteList(void)
 
 
 
+const set<uint32_t>
+AccountsBook::getKeysList(void)
+{
+    set<uint32_t> keysList;
+    set<Account*>::iterator it;
+    for (it = m_book.begin(); it != m_book.end(); ++it)
+    {
+        keysList.insert((**it).getKey());
+    }
+    return keysList;
+}
+
+
+
 void
 AccountsBook::displayWebsiteList(ostream& stream) const
 {
@@ -249,6 +249,44 @@ AccountsBook::getAccountPointer(const string website)
         }
     }
     throw string("Account " + website + " not found");
+}
+
+
+
+uint32_t
+AccountsBook::getAvailableKey(void)
+{
+    // Get a sorted list of account keys.
+    set<uint32_t> keysList = getKeysList();
+
+    // First check if there's an empty spot in the current accountsBook.
+    // It's sorted so if the last element is equal to the number of elements, there's no available room.
+    uint32_t lastKey = *(--(keysList.cend()));
+    if (keysList.size()  == lastKey)
+    {
+        return lastKey + 1;
+    }
+
+    // If we reach here, there's an available spot.
+    set<uint32_t>::iterator it = keysList.begin();
+    uint32_t previousValue = *it;
+
+    if (previousValue > 1)
+    {
+        // The first element of the list is above the minimum value, so there's an empty spot in front.
+        return 1;
+    }
+
+    ++it;
+    for (; it != keysList.end(); ++it)
+    {
+        if ((*it) > previousValue + 1)
+        {
+            return previousValue + 1;
+        }
+        previousValue = *it;
+    }
+    throw string("No value found");
 }
 
 

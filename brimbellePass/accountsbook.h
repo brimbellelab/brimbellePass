@@ -25,7 +25,9 @@ public:
     const Account *getAccount(const uint32_t accountKey) const;
     const Account *getAccount(const std::string website) const;
     QStringList getWebsiteList(void);
+    const std::set<uint32_t> getKeysList(void);
     void displayWebsiteList(std::ostream& stream) const;
+    uint32_t getAvailableKey(void);
 
 private:
     std::set<Account*> m_book;
