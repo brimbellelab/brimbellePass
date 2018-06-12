@@ -42,6 +42,9 @@ public:
 signals:
 
 public slots:
+    /// Add a login field if there's no empty login field already available.
+    void addLogin();
+
     /// Trigger the UI to move the "current password" to "old passwords" and generate a new one.
     void changePassword(void);
 

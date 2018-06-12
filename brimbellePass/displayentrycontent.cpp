@@ -4,6 +4,7 @@
 
 #include "displayentrycontent.h"
 
+#include <algorithm>
 #include <iostream>
 
 #include <QInputDialog>
@@ -25,8 +26,18 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
     lineEditWebsite = new QLineEdit("No account found");
 
     gbLogins = new QGroupBox("Logins", this);
+    // There should always be an empty login line available.
+    entryLineLogins.push_back(new QLineEdit(""));
+    QHBoxLayout* layoutLoginsGroupbox = new QHBoxLayout;
+
     layoutLogins = new QVBoxLayout;
-    gbLogins->setLayout(layoutLogins),
+    layoutLogins->addWidget(entryLineLogins[0]);
+    layoutLoginsGroupbox->addLayout(layoutLogins);
+    QPushButton* btnNewLogin = new QPushButton("New");
+    QObject::connect(btnNewLogin, SIGNAL(clicked()), this, SLOT(addLogin()));
+    btnNewLogin->setMaximumSize(40,20);
+    layoutLoginsGroupbox->addWidget(btnNewLogin, 0, Qt::AlignTop);
+    gbLogins->setLayout(layoutLoginsGroupbox);
 
     gbCurrentPassword = new QGroupBox("Current password");
     entryLineCurrentPassword = new PasswordEntryLine("", this);
@@ -84,14 +95,20 @@ DisplayEntryContent::clearContent(void)
     if (!currentAccount.getLogins().empty())
     {
         // Iterator on the logins list from account.
-        QVector<QLineEdit*>::iterator listLoginIt;
-        for (listLoginIt = entryLineLogins.begin(); listLoginIt != entryLineLogins.end(); listLoginIt++)
+        QVector<QLineEdit*>::iterator listLoginIt = entryLineLogins.begin();
+
+        // The first login field should not be deleted.
+        (*listLoginIt)->setText("");
+        ++listLoginIt;
+        // The rest should be deleted if present.
+        for (; listLoginIt != entryLineLogins.end(); listLoginIt++)
         {
             layoutLogins->removeWidget(*listLoginIt); // Remove QlineEdit from the layout.
             delete *listLoginIt; // Free memory of this login's QLineEdit.
         }
+        // Now the array of QLineEdit can be cleared except the first element.
+        entryLineLogins.resize(1);
     }
-    entryLineLogins.clear();
 
     entryLineCurrentPassword->setText("");
 
@@ -132,14 +149,19 @@ DisplayEntryContent::update(const Account *account)
     // Fill logins list.
     if (!currentAccount.getLogins().empty())
     {
-        list<string>::iterator loginsIt;
         list<string> loginsList = currentAccount.getLogins();
-        for (loginsIt = loginsList.begin(); loginsIt != loginsList.end(); ++loginsIt)
+        list<string>::iterator loginsIt = loginsList.begin();
+        // The first one is special as the line edit already exists.
+        entryLineLogins[0]->setText(QString::fromStdString(*loginsIt));
+        ++loginsIt;
+        // For the rest new QLineEdit need to be created an appended.
+        for (; loginsIt != loginsList.end(); ++loginsIt)
         {
             entryLineLogins.push_back(new QLineEdit(QString::fromStdString(*loginsIt)));
             layoutLogins->addWidget(entryLineLogins.back());
         }
     }
+
     try
     {
         entryLineCurrentPassword->setText(
@@ -190,6 +212,25 @@ DisplayEntryContent::update(const Account *account)
 
 
 void
+DisplayEntryContent::addLogin(void)
+{
+    // Check that there is no empty login field already available.
+    if (find_if(entryLineLogins.begin(),
+                entryLineLogins.end(),
+                [&](const QLineEdit* loginField) { return loginField->text().isEmpty();})
+        != entryLineLogins.end())
+    {
+        // There's an empty field available, so no need to create a new field.
+        return;
+    }
+    // No empty field available, so create one.
+    entryLineLogins.push_back(new QLineEdit(""));
+    layoutLogins->addWidget(entryLineLogins.back());
+}
+
+
+
+void
 DisplayEntryContent::changePassword(void)
 {
     ;//TODO
@@ -200,32 +241,39 @@ DisplayEntryContent::changePassword(void)
 void
 DisplayEntryContent::saveChanges(Account &accountToSave)
 {
-
-    // TODO deactivate this function if password is incorrect.
-    // throw
+    // If a field is empty, it's discarded.
 
     // TODO: change website name as well.
 
     // Save logins.
     for (auto i = 0; i < entryLineLogins.count(); i++)
     {
-        cout << "add login " << entryLineLogins[i]->text().toStdString() << endl;
-        accountToSave.addLogin(entryLineLogins[i]->text().toStdString());
+        if (!entryLineLogins[i]->text().isEmpty())
+        {
+            cout << "add login " << entryLineLogins[i]->text().toStdString() << endl;
+            accountToSave.addLogin(entryLineLogins[i]->text().toStdString());
+        }
     }
 
     // Save current password.
-    QString encryptedPassword = cipherEngine.encrypt(entryLineCurrentPassword->text());
-    accountToSave.setCurrentPassword(encryptedPassword.toStdString());
-    cout << "Current password set to " << encryptedPassword.toStdString()
-         << " (in clear: " << entryLineCurrentPassword->text().toStdString() << ")" << endl;
+    if (!entryLineCurrentPassword->text().isEmpty())
+    {
+        QString encryptedPassword = cipherEngine.encrypt(entryLineCurrentPassword->text());
+        accountToSave.setCurrentPassword(encryptedPassword.toStdString());
+        cout << "Current password set to " << encryptedPassword.toStdString()
+             << " (in clear: " << entryLineCurrentPassword->text().toStdString() << ")" << endl;
+    }
 
     // Save old password.
     for (auto i = 0; i < entryLineOldPasswords.count(); i++)
     {
-        QString encryptedOldPassword = cipherEngine.encrypt(entryLineOldPasswords[i]->text());
-        accountToSave.addOldPassword(encryptedOldPassword.toStdString());
-        cout << "Adding an old password as " << encryptedOldPassword.toStdString()
-             << " (in clear: " << entryLineOldPasswords[i]->text().toStdString() << ")" << endl;
+        if (!entryLineOldPasswords[i]->text().isEmpty())
+        {
+            QString encryptedOldPassword = cipherEngine.encrypt(entryLineOldPasswords[i]->text());
+            accountToSave.addOldPassword(encryptedOldPassword.toStdString());
+            cout << "Adding an old password as " << encryptedOldPassword.toStdString()
+                 << " (in clear: " << entryLineOldPasswords[i]->text().toStdString() << ")" << endl;
+        }
     }
 
     // Save Question/Answers.

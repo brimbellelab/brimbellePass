@@ -28,15 +28,17 @@ private slots:
     void saveDatabase(void);
     void saveAccount(void);
     void deleteAccount(void);
+    void createAccount(void);
 
 private:
-    QComboBox *comboBoxAccountsList;
-    DisplayEntryContent *displayEntryContent;
-    QPushButton *btnSaveDatabase;
-    QPushButton *btnSaveAccount;
-    QPushButton *btnDeleteAccount;
+    QComboBox* comboBoxAccountsList;
+    QPushButton* btnNewAccount;
+    DisplayEntryContent* displayEntryContent;
+    QPushButton* btnSaveDatabase;
+    QPushButton* btnSaveAccount;
+    QPushButton* btnDeleteAccount;
     ///@note this can only be temporary as it should be possible to modify it from the other tabs...
-    AccountsBook *accountsBook;
+    AccountsBook* accountsBook;
 };
 
 #endif // DISPLAYENTRYTAB_H

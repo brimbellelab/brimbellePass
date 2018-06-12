@@ -6,11 +6,12 @@
 
 #include "account.h"
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QApplication>
+#include <QHBoxLayout>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QString>
+#include <QVBoxLayout>
 
 #include <iostream>
 
@@ -23,6 +24,14 @@ DisplayEntryTab::DisplayEntryTab(AccountsBook *accounts, QWidget *parent) : QWid
 
     QObject::connect(comboBoxAccountsList, SIGNAL(currentIndexChanged(const QString&)),
                      this, SLOT(reloadEntryContent(const QString&)));
+
+    btnNewAccount = new QPushButton("New");
+    btnNewAccount->setMaximumSize(40, 20);
+    QObject::connect(btnNewAccount, SIGNAL(clicked()), this, SLOT(createAccount()));
+
+    QHBoxLayout* accountsFieldLayout = new QHBoxLayout();
+    accountsFieldLayout->addWidget(comboBoxAccountsList);
+    accountsFieldLayout->addWidget(btnNewAccount);
 
     displayEntryContent = new DisplayEntryContent(this);
 
@@ -38,8 +47,8 @@ DisplayEntryTab::DisplayEntryTab(AccountsBook *accounts, QWidget *parent) : QWid
     buttonsLayout->addWidget(btnSaveAccount);
     buttonsLayout->addWidget(btnDeleteAccount);
 
-    QVBoxLayout *verticalLayout = new QVBoxLayout();
-    verticalLayout->addWidget(comboBoxAccountsList);
+    QVBoxLayout* verticalLayout = new QVBoxLayout();
+    verticalLayout->addLayout(accountsFieldLayout);
     verticalLayout->addWidget(displayEntryContent);
     verticalLayout->addLayout(buttonsLayout);
 
@@ -165,4 +174,31 @@ DisplayEntryTab::deleteAccount(void)
 
     std::cout << "Loading item " << indexEntry << std::endl;
     comboBoxAccountsList->removeItem(indexEntry);
+}
+
+
+
+void
+DisplayEntryTab::createAccount(void)
+{
+    // Ask for the account name.
+    bool ok;
+    QString newAccountName = QInputDialog::getText(this,
+                                                   "Account name",
+                                                   "Enter the new account name",
+                                                   QLineEdit::Normal,
+                                                   QString(),
+                                                   &ok);
+    if (!ok || newAccountName.isEmpty())
+    {
+        return;
+    }
+    // Make sure the account name isn't taken yet.
+
+    accountsBook->addAccount(new Account(accountsBook->getAvailableKey(), newAccountName.toStdString()));
+    comboBoxAccountsList->blockSignals(true);
+    comboBoxAccountsList->addItem(newAccountName);
+    displayEntryContent->clearContent();
+    comboBoxAccountsList->setCurrentText(newAccountName);
+    comboBoxAccountsList->blockSignals(false);
 }
