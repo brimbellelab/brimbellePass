@@ -19,6 +19,7 @@
 #include <QWidget>
 
 #include "passwordentryline.h"
+#include "safetyqawidget.h"
 
 class DisplayEntryContent : public QWidget
 {
@@ -48,10 +49,6 @@ public slots:
     /// Trigger the UI to move the "current password" to "old passwords" and generate a new one.
     void changePassword(void);
 
-    // Update the content of the safety answer field.
-    // @param[in] index Index of the safety answer to be loaded.
-    void updateSafetyAnswerField(const int index);
-
 private:
     static const int defaultMargin = 5;
     Account currentAccount;
@@ -65,9 +62,7 @@ private:
     QGroupBox *gbOldPasswords;
     QVBoxLayout *layoutOldPasswords;
     QVector<PasswordEntryLine*> entryLineOldPasswords;
-    QGroupBox *gbSafetyQA;
-    QComboBox *comboBoxSafetyQuestion;
-    PasswordEntryLine *safetyAnswer;
+    SafetyQAWidget *safetyQA;
     QTextEdit *textEditMisc;
     Cipher cipherEngine;
 };

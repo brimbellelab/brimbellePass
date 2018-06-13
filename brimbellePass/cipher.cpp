@@ -104,6 +104,13 @@ Cipher::Cipher(QString mainPassword)
 
 
 
+Cipher::~Cipher()
+{
+    ;
+}
+
+
+
 void
 Cipher::setPassword(const QString &mainPassword)
 {

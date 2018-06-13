@@ -24,6 +24,8 @@ PasswordEntryLine::PasswordEntryLine(const QString password, QWidget *parent) : 
     lineEditPassword.setText(strPassword);
     lineEditPassword.setEchoMode(QLineEdit::Password);
     lineEditPassword.setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);
+    QObject::connect(&lineEditPassword, SIGNAL(editingFinished()), this, SLOT(handlePasswordFieldChanged()));
+
     btnCopy.setIconSize(QSize(12, 12));
     btnCopy.setIcon(QIcon(":icons/clipboardIco24.png"));
     QObject::connect(&btnCopy, SIGNAL(clicked()), this, SLOT(addPasswordToClipboard()));
@@ -78,4 +80,18 @@ PasswordEntryLine::addPasswordToClipboard(void)
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(this->strPassword, QClipboard::Clipboard);
+}
+
+
+
+void
+PasswordEntryLine::handlePasswordFieldChanged(void)
+{
+    // Check if there's an actual change.
+    if (lineEditPassword.text() != strPassword)
+    {
+        std::cout << "Password field changed" << std::endl;
+        strPassword = lineEditPassword.text();
+        emit passwordChanged();
+    }
 }

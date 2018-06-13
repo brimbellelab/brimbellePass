@@ -49,7 +49,8 @@ SOURCES += mainwindow.cpp \
     xmlinputfilesource.cpp \
     configfile.cpp \
     cipher.cpp \
-    infotab.cpp
+    infotab.cpp \
+    safetyqawidget.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -63,7 +64,8 @@ HEADERS  += mainwindow.h \
     xmlinputfilesource.h \
     configfile.h \
     cipher.h \
-    infotab.h
+    infotab.h \
+    safetyqawidget.h
 
 RESOURCES += \
     resources.qrc

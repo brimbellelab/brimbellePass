@@ -22,14 +22,19 @@ public:
     QString text(void);
 
 signals:
+    /// Triggered when the password field has been edited.
+    void passwordChanged(void);
 
 public slots:
     /// Hide the content of the text field, or show password.
     /// @param[in] hide: \ctrue Hide field;\cfalse Show password.
     void setFieldAsPassword(bool hide);
 
+private slots:
     /// Copy the current password into the clipboard.
     void addPasswordToClipboard(void);
+
+    void handlePasswordFieldChanged(void);
 
 private:
     static const int defaultMargin = 5;

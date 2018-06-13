@@ -19,6 +19,7 @@ class Cipher
 public:
     Cipher();
     Cipher(QString mainPassword);
+    ~Cipher();
 
     /// Set the user password / AES key that will be used to decrypt infos.
     /// @param[in] mainPassword The user password. Can be any string.
@@ -30,11 +31,13 @@ public:
     /// Encrypt a string with the current user password as AES key.
     /// @param[in] input The string to encrypt, in generic UTF8 QString format.
     /// @return The cyphered string in base64, UTF8 format.
+    /// @throw An std::runtime_error if comething went wrong.
     QString encrypt(QString input);
 
     /// Decrypt a string with the current user password as AES key.
     /// @param[in] input The AES ciphered string to decrypt, in Base64, UTF8 QString format.
     /// @return The cyphered string in UTF8 format.
+    /// @throw An std::runtime_error if comething went wrong.
     QString decrypt(QString input);
 
 private:
