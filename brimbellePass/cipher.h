@@ -29,16 +29,16 @@ public:
     void setPassword(const QString& mainPassword);
 
     /// Encrypt a string with the current user password as AES key.
-    /// @param[in] input The string to encrypt, in generic UTF8 QString format.
-    /// @return The cyphered string in base64, UTF8 format.
+    /// @param[in] inputPlainString The string to encrypt, in generic UTF8 QString format.
+    /// @return The ciphered string in base64, UTF8 format.
     /// @throw An std::runtime_error if comething went wrong.
-    QString encrypt(QString input);
+    QString encrypt(QString inputPlainString);
 
     /// Decrypt a string with the current user password as AES key.
-    /// @param[in] input The AES ciphered string to decrypt, in Base64, UTF8 QString format.
-    /// @return The cyphered string in UTF8 format.
+    /// @param[in] inputCryptedString The AES ciphered string to decrypt, in Base64, UTF8 QString format.
+    /// @return The deciphered string in UTF8 format.
     /// @throw An std::runtime_error if comething went wrong.
-    QString decrypt(QString input);
+    QString decrypt(QString inputCryptedString);
 
 private:
     static constexpr size_t KEY_SIZE = 32; // AES256 key size.

@@ -196,9 +196,16 @@ DisplayEntryTab::createAccount(void)
     // Make sure the account name isn't taken yet.
 
     accountsBook->addAccount(new Account(accountsBook->getAvailableKey(), newAccountName.toStdString()));
+
     comboBoxAccountsList->blockSignals(true);
-    comboBoxAccountsList->addItem(newAccountName);
-    displayEntryContent->clearContent();
+    comboBoxAccountsList->clear();
+    comboBoxAccountsList->addItems(accountsBook->getWebsiteList());
     comboBoxAccountsList->setCurrentText(newAccountName);
+    reloadEntryContent(newAccountName);
+
+
+    // comboBoxAccountsList->addItem(newAccountName);
+    // displayEntryContent->clearContent();
+    // comboBoxAccountsList->setCurrentText(newAccountName);
     comboBoxAccountsList->blockSignals(false);
 }

@@ -127,10 +127,16 @@ Cipher::setPassword(const QString &mainPassword)
 
 
 QString
-Cipher::encrypt(QString input)
+Cipher::encrypt(QString inputPlainString)
 {
     secure_string cryptedText;
-    secure_string plainText = input.toUtf8().data();
+    secure_string plainText = inputPlainString.toUtf8().data();
+
+    if (inputPlainString.isEmpty())
+    {
+        std::cout << "Nothing to encrypt" << std::endl;
+        return inputPlainString;
+    }
 
     // Dump original plain string.
     std::cout << "plainText initialized with " << plainText.size() << " bytes string: " << std::endl;
@@ -192,10 +198,16 @@ Cipher::encrypt(QString input)
 
 
 QString
-Cipher::decrypt(QString inputString)
+Cipher::decrypt(QString inputCryptedString)
 {
+    if (inputCryptedString.isEmpty())
+    {
+        std::cout << "Nothing to decrypt" << std::endl;
+        return inputCryptedString;
+    }
+
     // Conversion of the UTF8 Base64 string to a QByteArray, easier to handle.
-    QByteArray input = QByteArray::fromBase64(inputString.toUtf8());
+    QByteArray input = QByteArray::fromBase64(inputCryptedString.toUtf8());
     secure_string plainText;
     secure_string cryptedText;
     cryptedText.resize(input.size());
