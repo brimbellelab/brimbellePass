@@ -4,6 +4,8 @@
 
 #include "displayentrycontent.h"
 
+#include "dialognewpassword.h"
+
 #include <algorithm>
 #include <iostream>
 
@@ -33,17 +35,18 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
     layoutLogins = new QVBoxLayout;
     layoutLogins->addWidget(entryLineLogins[0]);
     layoutLoginsGroupbox->addLayout(layoutLogins);
-    QPushButton* btnNewLogin = new QPushButton("New");
+    QPushButton* btnNewLogin = new QPushButton("+");
     QObject::connect(btnNewLogin, SIGNAL(clicked()), this, SLOT(addLogin()));
-    btnNewLogin->setMaximumSize(40,20);
+    btnNewLogin->setMaximumSize(20 ,20);
     layoutLoginsGroupbox->addWidget(btnNewLogin, 0, Qt::AlignTop);
     gbLogins->setLayout(layoutLoginsGroupbox);
 
     gbCurrentPassword = new QGroupBox("Current password");
     entryLineCurrentPassword = new PasswordEntryLine("", this);
-    btnNewPassword = new QPushButton("New password", this);
+    btnNewPassword = new QPushButton("+", this);
+    btnNewPassword->setMaximumSize(20, 20);
     QObject::connect(btnNewPassword, SIGNAL(clicked()), this, SLOT(changePassword()));
-    QVBoxLayout *layoutCurrentPassword = new QVBoxLayout;
+    QHBoxLayout *layoutCurrentPassword = new QHBoxLayout;
     layoutCurrentPassword->addWidget(entryLineCurrentPassword);
     layoutCurrentPassword->addWidget(btnNewPassword);
     layoutCurrentPassword->setMargin(defaultMargin);
@@ -220,7 +223,17 @@ DisplayEntryContent::addLogin(void)
 void
 DisplayEntryContent::changePassword(void)
 {
-    ;//TODO
+    DialogNewPassword* dialog = new DialogNewPassword(this);
+    if (dialog->exec())
+    {
+        // Add a new entryLinePassword with the previous password.
+        entryLineOldPasswords.append(new PasswordEntryLine(entryLineCurrentPassword->text()));
+        layoutOldPasswords->addWidget(entryLineOldPasswords.last());
+
+        // Update the current password with the new one.
+        entryLineCurrentPassword->setText(dialog->data());
+    }
+    delete dialog;
 }
 
 
