@@ -52,7 +52,6 @@ public slots:
 private:
     static const int defaultMargin = 5;
     Account currentAccount;
-    QLineEdit *lineEditWebsite;
     QGroupBox *gbLogins;
     QVBoxLayout *layoutLogins;
     QVector<QLineEdit*> entryLineLogins;

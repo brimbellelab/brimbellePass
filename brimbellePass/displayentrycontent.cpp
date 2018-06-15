@@ -25,8 +25,6 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
                                                    QString(),
                                                    &ok));
 
-    lineEditWebsite = new QLineEdit("No account found");
-
     gbLogins = new QGroupBox("Logins", this);
     // There should always be an empty login line available.
     entryLineLogins.push_back(new QLineEdit(""));
@@ -62,7 +60,6 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
     textEditMisc = new QTextEdit();
 
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(lineEditWebsite);
     layout->addWidget(gbLogins);
     layout->addWidget(gbCurrentPassword);
     layout->addWidget(gbOldPasswords);
@@ -78,8 +75,6 @@ DisplayEntryContent::DisplayEntryContent(QWidget *parent) : QWidget(parent)
 void
 DisplayEntryContent::clearContent(void)
 {
-    lineEditWebsite->setText("");
-
     // Clean 'Logins' fields.
     if (!currentAccount.getLogins().empty())
     {
@@ -131,9 +126,6 @@ DisplayEntryContent::update(const Account *account)
 
     // Bind the content of this page with the new account infos.
     currentAccount = *account;
-
-    // Fill website field infos.
-    lineEditWebsite->setText(QString::fromStdString(currentAccount.getWebsite()));
 
     // Fill logins list.
     if (!currentAccount.getLogins().empty())
