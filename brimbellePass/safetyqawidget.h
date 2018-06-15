@@ -23,7 +23,7 @@ public:
     SafetyQAWidget(QWidget *parent, Cipher* cipher, const int margin = 0);
     virtual ~SafetyQAWidget() = default;
     /// Get the number of question / answer pairs.
-    size_t count(void);
+    int count(void);
     const QString& getQuestionText(const int index);
     const QString& getAnswerCryptedText(const int index);
     void setData(std::vector<std::pair<std::string, std::string> > data);

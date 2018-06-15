@@ -181,11 +181,6 @@ DisplayEntryContent::update(const Account *account)
 
     // Fill safety questions infos.
     safetyQA->setData(currentAccount.getSafetyQA());
-//    if (!currentAccount.getSafetyQuestions().empty())
-//    {
-//        comboBoxSafetyQuestion->addItems(currentAccount.getSafetyQuestions());
-//        updateSafetyAnswerField(0);
-//    }
 
     // Fill misc infos.
     if (!currentAccount.getMisc().empty())
@@ -277,7 +272,14 @@ DisplayEntryContent::saveChanges(Account &accountToSave)
     }
 
     // Save Question/Answers.
-    // TODO
+    for (auto i = 0; i < safetyQA->count(); i++)
+    {
+        if (!safetyQA->getAnswerCryptedText(i).isEmpty())
+        {
+            accountToSave.addSafetyQA(safetyQA->getQuestionText(i).toStdString(),
+                                      safetyQA->getAnswerCryptedText(i).toStdString());
+        }
+    }
 
     // Save Misc.
     if (!textEditMisc->toPlainText().isEmpty())

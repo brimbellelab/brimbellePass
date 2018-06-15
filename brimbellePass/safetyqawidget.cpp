@@ -60,7 +60,7 @@ SafetyQAWidget::SafetyQAWidget(QWidget *parent, Cipher* cipher, const int margin
 
 
 
-size_t
+int
 SafetyQAWidget::count(void)
 {
     return dataSafetyQA.count();
@@ -100,8 +100,6 @@ SafetyQAWidget::setData(vector<pair<string, string> > data)
 
     // Attribute new data.
     dataSafetyQA.resize(data.size());
-    cout << "dataSafetyQA.size()" << dataSafetyQA.size() << endl;
-    cout << "data.size()" << data.size() << endl;
     for (size_t index = 0; index < data.size(); ++index)
     {
         dataSafetyQA[index].first = QString::fromStdString(data[index].first);
@@ -192,12 +190,13 @@ SafetyQAWidget::saveDataSafetyAnswer(void)
     }
 
     // If the password field is empty, this question should be deleted.
-    if (safetyAnswer->text().isEmpty())
-    {
-        cout << "delete the safety question" << endl;
-        // TODO
-        return;
-    }
+    // However, for now, it will be deleted only when clicking the button "Save account", so proceed as usual.
+//    if (safetyAnswer->text().isEmpty())
+//    {
+//        cout << "delete the safety question" << endl;
+//        // TODO
+//        return;
+//    }
 
     try
     {
