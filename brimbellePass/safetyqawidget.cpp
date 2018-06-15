@@ -4,6 +4,8 @@
 
 #include "safetyqawidget.h"
 
+#include "dialogaddsafetyqa.h"
+
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QInputDialog>
@@ -135,14 +137,19 @@ SafetyQAWidget::clear(void)
 void
 SafetyQAWidget::addSafetyQA(void)
 {
-    // TODO
-    // Open a QInputDIalog asking for the question.
+    DialogAddSafetyQA* dialog = new DialogAddSafetyQA(this);
+    if (dialog->exec())
+    {
+        // Append the result to the existing data QVector.
+        pair<QString, QString> newSafetyQA = dialog->data();
+        newSafetyQA.second = cipherEngine->encrypt(newSafetyQA.second);
+        dataSafetyQA.append(newSafetyQA);
 
-    // Open a QInputDialog asking for the answer.
-
-    // Append the result to the existing data QVector.
-
-    // Select it in the combo box.
+        // Select it in the combo box.
+        comboBoxSafetyQuestion->addItem(dataSafetyQA.constLast().first);
+        comboBoxSafetyQuestion->setCurrentIndex(comboBoxSafetyQuestion->count() - 1);
+    }
+    delete dialog;
 }
 
 

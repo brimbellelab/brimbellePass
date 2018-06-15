@@ -50,7 +50,8 @@ SOURCES += mainwindow.cpp \
     configfile.cpp \
     cipher.cpp \
     infotab.cpp \
-    safetyqawidget.cpp
+    safetyqawidget.cpp \
+    dialogaddsafetyqa.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -65,7 +66,8 @@ HEADERS  += mainwindow.h \
     configfile.h \
     cipher.h \
     infotab.h \
-    safetyqawidget.h
+    safetyqawidget.h \
+    dialogaddsafetyqa.h
 
 RESOURCES += \
     resources.qrc
