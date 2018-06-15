@@ -41,7 +41,6 @@ SOURCES += mainwindow.cpp \
     displayentrytab.cpp \
     displayentrycontent.cpp \
     passwordentryline.cpp \
-    addentrytab.cpp \
     configurationtab.cpp \
     account.cpp \
     accountsbook.cpp \
@@ -58,7 +57,6 @@ HEADERS  += mainwindow.h \
     displayentrytab.h \
     displayentrycontent.h \
     passwordentryline.h \
-    addentrytab.h \
     configurationtab.h \
     account.h \
     accountsbook.h \

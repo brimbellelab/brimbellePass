@@ -8,7 +8,6 @@
 #include <QTabWidget>
 
 #include "accountsbook.h"
-#include "addentrytab.h"
 #include "configfile.h"
 #include "configurationtab.h"
 #include "displayentrytab.h"
@@ -26,7 +25,6 @@ private:
     AccountsBook* accountsBook;
     ConfigFile* confFile;
     DisplayEntryTab* displayEntryTab;
-    AddEntryTab* addEntryTab;
     ConfigurationTab* configurationTab;
     InfoTab* infoTab;
 };
