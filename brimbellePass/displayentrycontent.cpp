@@ -238,14 +238,11 @@ DisplayEntryContent::saveChanges(Account &accountToSave)
 {
     // If a field is empty, it's discarded.
 
-    // TODO: change website name as well.
-
     // Save logins.
     for (auto i = 0; i < entryLineLogins.count(); i++)
     {
         if (!entryLineLogins[i]->text().isEmpty())
         {
-            cout << "add login " << entryLineLogins[i]->text().toStdString() << endl;
             accountToSave.addLogin(entryLineLogins[i]->text().toStdString());
         }
     }
@@ -255,8 +252,6 @@ DisplayEntryContent::saveChanges(Account &accountToSave)
     {
         QString encryptedPassword = cipherEngine.encrypt(entryLineCurrentPassword->text());
         accountToSave.setCurrentPassword(encryptedPassword.toStdString());
-        cout << "Current password set to " << encryptedPassword.toStdString()
-             << " (in clear: " << entryLineCurrentPassword->text().toStdString() << ")" << endl;
     }
 
     // Save old password.
@@ -266,8 +261,6 @@ DisplayEntryContent::saveChanges(Account &accountToSave)
         {
             QString encryptedOldPassword = cipherEngine.encrypt(entryLineOldPasswords[i]->text());
             accountToSave.addOldPassword(encryptedOldPassword.toStdString());
-            cout << "Adding an old password as " << encryptedOldPassword.toStdString()
-                 << " (in clear: " << entryLineOldPasswords[i]->text().toStdString() << ")" << endl;
         }
     }
 
@@ -284,7 +277,6 @@ DisplayEntryContent::saveChanges(Account &accountToSave)
     // Save Misc.
     if (!textEditMisc->toPlainText().isEmpty())
     {
-        cout << "Add misc : " << textEditMisc->toPlainText().toStdString() << endl;
         accountToSave.addMisc(textEditMisc->toPlainText().toStdString());
     }
 }

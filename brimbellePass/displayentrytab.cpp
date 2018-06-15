@@ -141,7 +141,6 @@ DisplayEntryTab::saveAccount(void)
         // Account's website not found... Loading the first entry.
         indexEntry = 0;
     }
-    std::cout << "Loading item " << indexEntry << std::endl;
     comboBoxAccountsList->blockSignals(false);
     comboBoxAccountsList->setCurrentIndex(indexEntry);
 }
@@ -172,7 +171,6 @@ DisplayEntryTab::deleteAccount(void)
         btnDeleteAccount->setEnabled(false);
     }
 
-    std::cout << "Loading item " << indexEntry << std::endl;
     comboBoxAccountsList->removeItem(indexEntry);
 }
 
@@ -202,10 +200,5 @@ DisplayEntryTab::createAccount(void)
     comboBoxAccountsList->addItems(accountsBook->getWebsiteList());
     comboBoxAccountsList->setCurrentText(newAccountName);
     reloadEntryContent(newAccountName);
-
-
-    // comboBoxAccountsList->addItem(newAccountName);
-    // displayEntryContent->clearContent();
-    // comboBoxAccountsList->setCurrentText(newAccountName);
     comboBoxAccountsList->blockSignals(false);
 }

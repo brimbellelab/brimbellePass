@@ -134,19 +134,19 @@ Cipher::encrypt(QString inputPlainString)
 
     if (inputPlainString.isEmpty())
     {
-        std::cout << "Nothing to encrypt" << std::endl;
+        // "Nothing to encrypt".
         return inputPlainString;
     }
 
     // Dump original plain string.
-    std::cout << "plainText initialized with " << plainText.size() << " bytes string: " << std::endl;
+    /*std::cout << "plainText initialized with " << plainText.size() << " bytes string: " << std::endl;
     for (size_t i = 0; i < plainText.size(); i++)
     {
         std::cout << plainText[i];
     }
     std::cout << std::endl;
 
-    std::cout << "size of plain char*: " << (int)plainText.size() << std::endl;
+    std::cout << "size of plain char*: " << (int)plainText.size() << std::endl;*/
 
     // Create the EVP_CIPHER_CTX object needed for encrypting.
     std::unique_ptr<EVP_CIPHER_CTX, decltype(&::EVP_CIPHER_CTX_free)> ctx(EVP_CIPHER_CTX_new(), EVP_CIPHER_CTX_free);
@@ -181,11 +181,11 @@ Cipher::encrypt(QString inputPlainString)
 
     // Dump ciphered string and assign result.
     QByteArray result;
-    std::cout << "resulting Ciphered text of " << out_len1 + out_len2 << " bytes: " <<  std::endl;
-    std::cout << std::hex <<  std::setw(2);
+//    std::cout << "resulting Ciphered text of " << out_len1 + out_len2 << " bytes: " <<  std::endl;
+//    std::cout << std::hex <<  std::setw(2);
     for (int i = 0; i < out_len1 + out_len2; i++)
     {
-        std::cout  << std::setfill('0') << "0x" << (static_cast<unsigned short>(cryptedText[i]) & 0xFF) << " ";
+//        std::cout  << std::setfill('0') << "0x" << (static_cast<unsigned short>(cryptedText[i]) & 0xFF) << " ";
         result.append(cryptedText[i]);
     }
     std::cout << std::dec << std::endl;
@@ -202,7 +202,7 @@ Cipher::decrypt(QString inputCryptedString)
 {
     if (inputCryptedString.isEmpty())
     {
-        std::cout << "Nothing to decrypt" << std::endl;
+        // Nothing to decrypt.
         return inputCryptedString;
     }
 
@@ -213,7 +213,7 @@ Cipher::decrypt(QString inputCryptedString)
     cryptedText.resize(input.size());
     memcpy(&cryptedText[0], input.data(), input.size());
 
-    std::cout << "input qbyte array is " << input.size() << " bytes" << std::endl;
+/*    std::cout << "input qbyte array is " << input.size() << " bytes" << std::endl;
     // Dump ciphered string.
     std::cout << "cryptedText initialized with " << cryptedText.size() << " bytes string: " << std::endl;
     std::cout << std::hex;
@@ -221,7 +221,7 @@ Cipher::decrypt(QString inputCryptedString)
     {
         std::cout << "0x"<< (static_cast<unsigned short>(cryptedText[i]) & 0xFF) << " ";
     }
-    std::cout << std::dec << std::endl;
+    std::cout << std::dec << std::endl;*/
 
     // Create the EVP_CIPHER_CTX object needed for decrypting.
     std::unique_ptr<EVP_CIPHER_CTX, decltype(&::EVP_CIPHER_CTX_free)> ctx(EVP_CIPHER_CTX_new(), EVP_CIPHER_CTX_free);
@@ -237,8 +237,6 @@ Cipher::decrypt(QString inputCryptedString)
 
     int out_len1 = (int)plainText.size();
 
-    std::cout << "plainText.size = " << out_len1 << ", cryptedText.size = " << cryptedText.size() << std::endl;
-
     returnCode = EVP_DecryptUpdate(ctx.get(),
                            (unsigned char*)&plainText[0],
                            &out_len1,
@@ -250,9 +248,6 @@ Cipher::decrypt(QString inputCryptedString)
     }
 
     int out_len2 = (int)plainText.size() - out_len1;
-    std::cout  << "Size of plainText: " << plainText.size()
-               << ", outlen1 is " << out_len1
-               << "; outlen2 is " << out_len2 << std::endl;
 
     returnCode = EVP_DecryptFinal_ex(ctx.get(),
                              (unsigned char*)&plainText[0] + out_len1,
@@ -268,13 +263,13 @@ Cipher::decrypt(QString inputCryptedString)
 
     // Dump plain string and assign it to result.
     QByteArray result;
-    std::cout << " Decyphered to " << out_len1 + out_len2 << "bytes:" << std::endl;
+//    std::cout << " Decyphered to " << out_len1 + out_len2 << "bytes:" << std::endl;
     for (size_t i = 0; i < plainText.size(); i++)
     {
-        std::cout << plainText[i];
+//        std::cout << plainText[i];
         result.append(plainText[i]);
     }
-    std::cout << std::endl;
+//    std::cout << std::endl;
 
     EVP_CIPHER_CTX_cleanup(ctx.get()); // Should be call when done to remove sensitive information from memory.
 
