@@ -24,6 +24,7 @@ public:
     void deleteAccount(std::string website);
     const Account *getAccount(const uint32_t accountKey) const;
     const Account *getAccount(const std::string website) const;
+    bool exists(const std::string website) const;
     QStringList getWebsiteList(void);
     const std::set<uint32_t> getKeysList(void);
     void displayWebsiteList(std::ostream& stream) const;

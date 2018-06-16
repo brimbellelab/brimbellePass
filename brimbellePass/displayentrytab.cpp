@@ -191,7 +191,11 @@ DisplayEntryTab::createAccount(void)
     {
         return;
     }
-    // TODO: make sure the account name isn't taken yet.
+    if (accountsBook->exists(newAccountName.toStdString()))
+    {
+        QMessageBox::warning(this, "Accounts exists", "Accounts name already exist!");
+        return;
+    }
 
     accountsBook->addAccount(new Account(accountsBook->getAvailableKey(), newAccountName.toStdString()));
 

@@ -46,6 +46,10 @@ TestAccountsBook::getAvailableKey(void)
 {
     // Create an empty accountsBook.
     AccountsBook* accountsBookAvailableKey = new AccountsBook();
+
+    // Adding this test as getAvailableKey use to crash on an empty accountsBook.
+    QCOMPARE(accountsBookAvailableKey->getAvailableKey(), 1u);
+
     accountsBookAvailableKey->addAccount(new Account(2u));// Create an account with a key of 2.
     accountsBookAvailableKey->addAccount(new Account(4u));// Create an account with a key of 4.
     accountsBookAvailableKey->addAccount(new Account(5u));// Create an account with a key of 5.
@@ -59,4 +63,24 @@ TestAccountsBook::getAvailableKey(void)
 
     QCOMPARE(accountsBookAvailableKey->getAvailableKey(), 6u);
     delete accountsBookAvailableKey;
+}
+
+
+
+void
+TestAccountsBook::exists(void)
+{
+    AccountsBook* accountsBookExists = new AccountsBook();
+
+    QVERIFY(!accountsBookExists->exists("Account1"));
+
+    accountsBookExists->addAccount(new Account(1, "Account1"));// Create an account with a key of 1, and a name "Account1".
+    QVERIFY(accountsBookExists->exists("Account1"));
+
+    accountsBookExists->addAccount(new Account(2, "Account2"));// Create an account with a key of 1, and a name "Account2".
+    QVERIFY(accountsBookExists->exists("Account1"));
+
+    QVERIFY(!accountsBookExists->exists("Account3"));
+
+    delete accountsBookExists;
 }

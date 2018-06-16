@@ -180,6 +180,17 @@ AccountsBook::getAccount(const string website) const
 
 
 
+bool
+AccountsBook::exists(const string website) const
+{
+    return (find_if(m_book.begin(),
+                    m_book.end(),
+                    [&website](const Account* account){ return account->getWebsite() == website; })
+            != m_book.end());
+}
+
+
+
 QStringList
 AccountsBook::getWebsiteList(void)
 {

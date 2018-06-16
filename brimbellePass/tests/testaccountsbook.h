@@ -16,6 +16,7 @@ private slots:
     void deleteAccount(void);
     void addAccount(void);
     void getAvailableKey(void);
+    void exists(void);
 
 private:
     AccountsBook accountsBook;
