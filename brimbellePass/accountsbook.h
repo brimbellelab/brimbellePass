@@ -28,6 +28,7 @@ public:
     const std::set<uint32_t> getKeysList(void);
     void displayWebsiteList(std::ostream& stream) const;
     uint32_t getAvailableKey(void);
+    void saveAccountsBookToXML(void);
 
 private:
     std::set<Account*> m_book;

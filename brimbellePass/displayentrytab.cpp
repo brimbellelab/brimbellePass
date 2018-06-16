@@ -25,8 +25,8 @@ DisplayEntryTab::DisplayEntryTab(AccountsBook *accounts, QWidget *parent) : QWid
     QObject::connect(comboBoxAccountsList, SIGNAL(currentIndexChanged(const QString&)),
                      this, SLOT(reloadEntryContent(const QString&)));
 
-    btnNewAccount = new QPushButton("New");
-    btnNewAccount->setMaximumSize(40, 20);
+    btnNewAccount = new QPushButton("+");
+    btnNewAccount->setMaximumSize(20, 20);
     QObject::connect(btnNewAccount, SIGNAL(clicked()), this, SLOT(createAccount()));
 
     QHBoxLayout* accountsFieldLayout = new QHBoxLayout();
@@ -96,7 +96,7 @@ DisplayEntryTab::reloadEntryContent(const QString& text)
 void
 DisplayEntryTab::saveDatabase(void)
 {
-    QMessageBox::warning(this, "Oopsie", "It's not yet possible to save the database.");
+    accountsBook->saveAccountsBookToXML();
 }
 
 

@@ -32,38 +32,6 @@ XmlDom::XmlDom(const QString &xmlPath, QWidget *parent) : QWidget(parent), xmlFi
     }
     xml_doc.close();
 
-//    QDomElement loginsRoot = xmlDomDocument->documentElement();
-
-//    // Gonna iterate on children of the root.
-//    QDomElement loginEntry = loginsRoot.firstChild().toElement();
-//    while (!loginEntry.isNull())
-//    {
-//        // Ensure it's the root of an entry.
-//        if (loginEntry.tagName() == "entry")
-//        {
-//            QString id = loginEntry.attribute("id", "noID");
-//            cout << "ID of this entry: " << id.toStdString() << endl;
-//            QDomElement entryChild = loginEntry.firstChild().toElement();
-
-//            while (!entryChild.isNull())
-//            {
-//                if (entryChild.tagName() == "website")
-//                {
-//                    cout << "tagname website: " << entryChild.firstChild().toText().data().toStdString() << endl;
-//                }
-//                else if (entryChild.tagName() == "login")
-//                {
-//                    cout << "tagname login: " << entryChild.firstChild().toText().data().toStdString() << endl;
-//                }
-//                else
-//                {
-//                    cout << "tagname not handled yet: " << entryChild.tagName().toStdString() << endl;
-//                }
-//                entryChild = entryChild.nextSibling().toElement();
-//            }
-//        }
-//        loginEntry = loginEntry.nextSibling().toElement();
-//    }
     this->hide();
 }
 

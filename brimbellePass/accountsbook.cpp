@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <vector>
 
 #include <QString>
 
@@ -287,6 +288,127 @@ AccountsBook::getAvailableKey(void)
         previousValue = *it;
     }
     throw string("No value found");
+}
+
+
+
+void
+AccountsBook::saveAccountsBookToXML(void)
+{
+    QFile loginsXmlFile("generatedLoginFile.xml");//QString::fromStdString(xmlFileLogin));
+    QFile passwordsXmlFile("generatedPwdFile.xml");
+
+    if ((loginsXmlFile.open(QIODevice::WriteOnly)) && passwordsXmlFile.open(QIODevice::WriteOnly))
+    {
+        // Generate XML structure;
+        QDomDocument loginsDom("loginList");
+        QDomDocument passwordsDom("pwdList");
+
+        // Root element.
+        QDomElement loginListElement = loginsDom.createElement("loginList");
+        loginsDom.appendChild(loginListElement);
+
+        // It seems like a good idea to add the version of the engine as an attribute.
+        loginListElement.setAttribute("version", "1.0");
+
+        // Root element of password
+        QDomElement pwdListElement = passwordsDom.createElement("pwdList");
+        passwordsDom.appendChild(pwdListElement);
+
+        set<Account*>::iterator it;
+        for (it = m_book.begin(); it != m_book.end(); ++it)
+        {
+            // Entry element AKA account.
+            // To logins file.
+            QDomElement entryElement = loginsDom.createElement("entry");
+            loginListElement.appendChild(entryElement);
+            entryElement.setAttribute("id", QString::number((**it).getKey()));
+            entryElement.setAttribute("website", QString::fromStdString((**it).getWebsite()));
+
+            //To passwords file.
+            QDomElement pwdEntryElement = passwordsDom.createElement("entry");
+            pwdListElement.appendChild(pwdEntryElement);
+            pwdEntryElement.setAttribute("id", QString::number((**it).getKey()));
+
+            // Logins
+            list<string> logins = (**it).getLogins();
+            list<string>::iterator itLogins;
+            for (itLogins = logins.begin(); itLogins != logins.end(); ++itLogins)
+            {
+                QDomElement loginElement = loginsDom.createElement("login");
+                entryElement.appendChild(loginElement);
+                QDomText loginValue = loginsDom.createTextNode(QString::fromStdString(*itLogins));
+                loginElement.appendChild(loginValue);
+            }
+
+            // Current password.
+            QDomElement passwordElement = passwordsDom.createElement("password");
+            pwdEntryElement.appendChild(passwordElement);
+            QDomText passwordValue = passwordsDom.createTextNode(QString::fromStdString((*it)->getCurrentPassword()));
+            passwordElement.appendChild(passwordValue);
+
+            // Old password.
+            list<string> oldPasswords = (**it).getOldPasswords();
+            list<string>::iterator itOldPasswords;
+            for (itOldPasswords = oldPasswords.begin(); itOldPasswords != oldPasswords.end(); ++itOldPasswords)
+            {
+                QDomElement oldPasswordElement = passwordsDom.createElement("oldPassword");
+                pwdEntryElement.appendChild(oldPasswordElement);
+                QDomText oldPasswordValue = passwordsDom.createTextNode(QString::fromStdString(*itOldPasswords));
+                oldPasswordElement.appendChild(oldPasswordValue);
+            }
+
+            // Safety questions/answers.
+            int indexQA = 0;
+            for (pair<string, string> qa: (*it)->getSafetyQA())
+            {
+                // Safety question.
+                QDomElement safetyQuestionElement = loginsDom.createElement("safetyQuestion");
+                entryElement.appendChild(safetyQuestionElement);
+                safetyQuestionElement.setAttribute("index", QString::number(indexQA));
+                QDomText safetyQuestionValue = loginsDom.createTextNode(QString::fromStdString(qa.first));
+                safetyQuestionElement.appendChild(safetyQuestionValue);
+
+                // Safety answer.
+                QDomElement safetyAnswerElement = passwordsDom.createElement("safetyAnswer");
+                pwdEntryElement.appendChild(safetyAnswerElement);
+                safetyAnswerElement.setAttribute("index", QString::number(indexQA));
+                QDomText safetyAnswerValue = passwordsDom.createTextNode(QString::fromStdString(qa.second));
+                safetyAnswerElement.appendChild(safetyAnswerValue);
+
+                // Don't forget to increment the index.
+                indexQA++;
+            }
+
+            // Misc.
+            list<string> misc = (**it).getMisc();
+            list<string>::iterator itMisc;
+            for (itMisc = misc.begin(); itMisc != misc.end(); ++itMisc)
+            {
+                QDomElement miscElement = loginsDom.createElement("misc");
+                entryElement.appendChild(miscElement);
+                QDomText miscValue = loginsDom.createTextNode(QString::fromStdString(*itMisc));
+                miscElement.appendChild(miscValue);
+            }
+        }
+
+        // Writing the DOM into the logins file.
+        QString loginsDomString = loginsDom.toString();
+        QTextStream writeLoginsFileStream(&loginsXmlFile);
+        writeLoginsFileStream << loginsDomString;
+
+        // Writing the DOM into the passwords file.
+        QString passwordsDomString = passwordsDom.toString();
+        QTextStream writePasswordsFileStream(&passwordsXmlFile);
+        writePasswordsFileStream << passwordsDomString;
+    }
+    else
+    {
+        // QMessageBox::warning(this, "Create Login file", "The Login database file couldn't be saved");
+        throw QString("The Login database file couldn't be saved");
+    }
+    loginsXmlFile.close();
+    passwordsXmlFile.close();
 }
 
 
