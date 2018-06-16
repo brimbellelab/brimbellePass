@@ -4,6 +4,7 @@
 
 #include "accountsbook.h"
 
+#include "configfile.h"
 #include "xmldom.h"
 
 #include <algorithm>
@@ -295,8 +296,12 @@ AccountsBook::getAvailableKey(void)
 void
 AccountsBook::saveAccountsBookToXML(void)
 {
-    QFile loginsXmlFile("generatedLoginFile.xml");//QString::fromStdString(xmlFileLogin));
-    QFile passwordsXmlFile("generatedPwdFile.xml");
+    // Fetch XML Files path.
+    ConfigFile configFile;
+
+    // Open files.
+    QFile loginsXmlFile(configFile.getLoginsFilePath());
+    QFile passwordsXmlFile(configFile.getPasswordsFilePath());
 
     if ((loginsXmlFile.open(QIODevice::WriteOnly)) && passwordsXmlFile.open(QIODevice::WriteOnly))
     {
@@ -405,7 +410,7 @@ AccountsBook::saveAccountsBookToXML(void)
     else
     {
         // QMessageBox::warning(this, "Create Login file", "The Login database file couldn't be saved");
-        throw QString("The Login database file couldn't be saved");
+        throw QString("The database files couldn't be saved");
     }
     loginsXmlFile.close();
     passwordsXmlFile.close();
