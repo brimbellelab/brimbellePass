@@ -7,8 +7,8 @@ BrimbellePass is a free software, licensed under GNU GPLv3.
 
 ## Disclaimer
 
-BrimbellePass is still a work in progress and clearly lacks A LOT of necessary features before claiming to be at the
-alpha version stage. Refer to the road map for more details before using.
+BrimbellePass is still a work in progress and clearly lacks A LOT of necessary features before claiming to be the
+perfect password manager. Refer to the road map for more details before using.
 
 This software is distributed AS IS, with no warranty expressed or implied.
 
@@ -89,10 +89,13 @@ Default password associated with these files is `GUEST`.
 ## Road map
 
 Here are the next features to be developed. Feel free to help and contribute if you're interested!
-- add an Account entry from the GUI.
-- modify an entry from the GUI and save the changes to the XML file.
-- create empty logins/passwords XML files.
+
+- friendly wizard to get set when the software is opened for the first time.
+- user should be able to change the main password.
+- the accounts should appear in alphabetical order in the comboBox list AND
+- accounts shouldn't be stored by alphabetical order in the XML files.
 - translation to French.
+- add a checksum attribute to the "entry" tag in both XML files to make sure the 2 files match?
 - shuffle entries id, for when one of the database files has been compromised.
 - export the database to a csv file (or even xml file), without encryption, human readable.
 - modify the main password, which implies to decipher all encrypted data and re-encrypt everything with the new key.
