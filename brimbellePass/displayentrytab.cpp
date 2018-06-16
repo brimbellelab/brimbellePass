@@ -191,7 +191,7 @@ DisplayEntryTab::createAccount(void)
     {
         return;
     }
-    // Make sure the account name isn't taken yet.
+    // TODO: make sure the account name isn't taken yet.
 
     accountsBook->addAccount(new Account(accountsBook->getAvailableKey(), newAccountName.toStdString()));
 
@@ -201,4 +201,6 @@ DisplayEntryTab::createAccount(void)
     comboBoxAccountsList->setCurrentText(newAccountName);
     reloadEntryContent(newAccountName);
     comboBoxAccountsList->blockSignals(false);
+    btnSaveAccount->setEnabled(true);
+    btnDeleteAccount->setEnabled(true);
 }

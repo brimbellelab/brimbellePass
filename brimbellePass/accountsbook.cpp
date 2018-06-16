@@ -261,6 +261,12 @@ AccountsBook::getAvailableKey(void)
     // Get a sorted list of account keys.
     set<uint32_t> keysList = getKeysList();
 
+    // If there is no account, the first available key is 1.
+    if (keysList.size() == 0)
+    {
+        return 1;
+    }
+
     // First check if there's an empty spot in the current accountsBook.
     // It's sorted so if the last element is equal to the number of elements, there's no available room.
     uint32_t lastKey = *(--(keysList.cend()));
@@ -415,6 +421,7 @@ AccountsBook::saveAccountsBookToXML(void)
     loginsXmlFile.close();
     passwordsXmlFile.close();
 }
+
 
 
 

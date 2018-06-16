@@ -19,6 +19,7 @@ ConfigFile::ConfigFile(QWidget *parent) : QWidget(parent)
     QFile confFile(confFilePath);
     if (!confFile.exists())
     {
+        // First time BrimbellePass is started?
         QMessageBox::warning(this, "No configuration file found", "A new empty configuration file will be created.");
         createConfFile();
     }

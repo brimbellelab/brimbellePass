@@ -6,6 +6,7 @@
 
 #include "xmldom.h"
 
+#include <QMessageBox>
 #include <QVBoxLayout>
 
 using namespace std;
@@ -35,5 +36,8 @@ void
 ConfigurationTab::saveChanges(void)
 {
     confFile->updateLoginsAndPasswordsFilePath(loginsSource->getPath(), passwordsSource->getPath());
+
+    // TODO: instead of that message, reload the AccountsBook directly.
+    QMessageBox::information(this, "Changes saved", "Changes have been saved. Restart BrimbellePass to apply.");
 }
 
