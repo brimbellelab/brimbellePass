@@ -28,7 +28,7 @@ TestCipher::encrypt_data(void)
 
     QTest::newRow("Zero length string (pwd: GUEST)")
             << ""
-            << "U1c9+4WMRkmGwp4dJlMF/g=="
+            << ""
             << cipherGUEST;
     QTest::newRow("15 char string (pwd: GUEST)")
             << "012345678901234"
@@ -45,7 +45,7 @@ TestCipher::encrypt_data(void)
 
     QTest::newRow("Zero length string (pwd: 0123456789)")
             << ""
-            << "XRapi1DWQ4vjXEeNu4DGFA=="
+            << ""
             << cipher10;
     QTest::newRow("15 char string (pwd: 0123456789)")
             << "012345678901234"
@@ -62,7 +62,7 @@ TestCipher::encrypt_data(void)
 
     QTest::newRow("Zero length string (pwd: Lorem ipsum dolor sit amet, consectetur adipiscing elit)")
             << ""
-            << "Af5kxa4xk7Zg6/ussZpHoQ=="
+            << ""
             << cipherLongPassword;
     QTest::newRow("15 char string (pwd: Lorem ipsum dolor sit amet, consectetur adipiscing elit)")
             << "012345678901234"
