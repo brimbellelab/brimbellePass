@@ -5,7 +5,6 @@
 #ifndef INFOTAB_H
 #define INFOTAB_H
 
-#include <QLabel>
 #include <QPushButton>
 #include <QWidget>
 

@@ -4,10 +4,25 @@
 #
 #-------------------------------------------------
 
+message(===============================)
+
 QT       += core gui
 QT       += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+#Application version
+VERSION_MAJOR = 1
+VERSION_MINOR = 0
+VERSION_PATCH = 0
+
+DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
+           "VERSION_MINOR=$$VERSION_MINOR"\
+           "VERSION_PATCH=$$VERSION_PATCH"
+
+#Target version
+VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
+message(Building v$$VERSION)
 
 TEMPLATE = app
 CONFIG += c++11

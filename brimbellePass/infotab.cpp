@@ -4,32 +4,45 @@
 
 #include "infotab.h"
 
+#include <QLabel>
 #include <QMessageBox>
 #include <QVBoxLayout>
 
 InfoTab::InfoTab(QWidget *parent) : QWidget(parent)
 {
-    // Description
+    // Description.
     QLabel* description = new QLabel("BrimbellePass, a free, split-database password manager.", this);
 
     btnHelp = new QPushButton("Help");
     connect(btnHelp, SIGNAL(clicked()), this, SLOT(openHelp()));
 
-    // Version
-    QLabel* version = new QLabel("Version 0.0.1", this); // TODO Have a dedicated class for version control?
-    // TODO Add a button to check for update.
+    // Version.
+    QLabel* version = new QLabel(QString("Version %1.%2.%3").arg(VERSION_MAJOR).arg(VERSION_MINOR).arg(VERSION_PATCH),
+                                this);
 
-    // Copyright
+    // Copyright.
     QLabel* copyright = new QLabel("Copyright (C) 2018, by Landry COLLET for BrimbelleLab.", this);
 
-    // License
-    QLabel* license = new QLabel("Released under the GNU General Public License v3, see https://www.gnu.org/licenses",
+    // License.
+    QLabel* license = new QLabel("Released under the GNU General Public License v3, see",
                                  this);
     license->setWordWrap(true);
 
-    // Contact
-    QLabel* contact = new QLabel("More on\nhttp://www.github.com/brimbellelab/brimbellepass", this);
+    QLabel* licenseLink = new QLabel(this);
+    licenseLink->setOpenExternalLinks(true);
+    licenseLink->setText("<a href=\"https://www.gnu.org/licenses\">www.gnu.org/licenses</a>");
+
+    // Contact.
+    QLabel* contactPre = new QLabel("More on:", this);
+    QLabel* contact = new QLabel(this);
+    contact->setOpenExternalLinks(true);
     contact->setWordWrap(true);
+    contact->setText("<a href=\"http://www.github.com/brimbellelab/brimbellepass\">www.github.com/brimbellelab/brimbellepass</a>");
+
+    // Buy beer
+    QLabel* buyBeer = new QLabel(this);
+    buyBeer->setOpenExternalLinks(true);
+    buyBeer->setText("<a href=\"https://www.paypal.me/LandryCOLLET\">Buy me a beer!</a>");
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(description);
@@ -37,8 +50,11 @@ InfoTab::InfoTab(QWidget *parent) : QWidget(parent)
     layout->addWidget(version);
     layout->addWidget(copyright);
     layout->addWidget(license);
+    layout->addWidget(licenseLink);
+    layout->addWidget(contactPre);
     layout->addWidget(contact);
-    layout->addSpacing(300);
+    layout->addWidget(buyBeer);
+    layout->addSpacing(400);
     this->setLayout(layout);
 }
 
