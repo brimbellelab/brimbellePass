@@ -1,6 +1,6 @@
 # BrimbellePass
 
-A split-database password manager, by [Landry COLLET](https://github.com/landrycollet) for [BrimbelleLab](https://github.com/brimbellelab).
+A split-database password manager, by [Landry COLLET](https://www.github.com/landrycollet) for [BrimbelleLab](https://www.github.com/brimbellelab).
 
 BrimbellePass is a free software, licensed under GNU GPLv3.
 
@@ -22,12 +22,12 @@ There are plenty of solutions available, but none seems to match my requirements
 - AES256 encryption of passwords and "safety answers".
 - No storage of password on untrusted remote servers.
 - No plugins embedded in web browser.
-- *Multiplateform, including smartphones (granted that one's not for tomorrow, although the use of Qt should make it
-easier).*
 - Possibility to copy a password without never displaying it on the screen (useful in public areas).
 - Possibility to simply display the password (useful when at home, the app running on a different device than the one
 where you want to enter the password).
 - Easy to track your password/login database with versioning tools such as SVN or Git.
+- *Multiplateform, including smartphones (granted that one's not for tomorrow, although the use of Qt should make it
+easier).*
 
 - **and the main feature of BrimbellePass: the ability to store (encrypted) passwords list and logins list in two
 different, separate XML files.**
@@ -44,7 +44,7 @@ Features in *italic* are not yet implemented, but I'm working hard on it!
 For now this software has been developed on MacOS X 10.13 but it should build fine on Windows and Linux as well as long
 as the dependancies are installed on your computer.
 
-**For your safety, has the software is not in a stable version yet, I would strongly advise you to keep track of your
+**For your safety, as the software is not in a stable version yet, I would strongly advise you to keep track of your
 passwords on another medium as well.**
 
 Knowing the current limitations of BrimbellePass, if you don't feel wild enough to use this software, feel free to have
@@ -94,7 +94,7 @@ Here are the next features to be developed. Feel free to help and contribute if 
 - user should be able to change the main password.
 - the accounts should appear in alphabetical order in the comboBox list AND
 - accounts shouldn't be stored by alphabetical order in the XML files.
-- translation to French.
+- translation to French, and other languages.
 - add a checksum attribute to the "entry" tag in both XML files to make sure the 2 files match?
 - shuffle entries id, for when one of the database files has been compromised.
 - export the database to a csv file (or even xml file), without encryption, human readable.
@@ -110,7 +110,7 @@ Here are the next features to be developed. Feel free to help and contribute if 
 ## Issues
 
 *TODO: point to the BrimbellePass Issues section in GitHub*
-
+- Elements parsed in an incorrect order when hitting TAB key.
 
 ## Author
 

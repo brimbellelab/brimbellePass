@@ -131,8 +131,9 @@ AccountsBook::addAccount(Account* newAccount)
 void
 AccountsBook::deleteAccount(uint32_t accountKey)
 {
-    // TODO free associated memory!
-     m_book.erase(m_book.find(getAccountPointer(accountKey)));
+    Account* accountPtr = getAccountPointer(accountKey);
+    m_book.erase(m_book.find(accountPtr));
+    delete accountPtr;
 }
 
 
@@ -140,8 +141,9 @@ AccountsBook::deleteAccount(uint32_t accountKey)
 void
 AccountsBook::deleteAccount(const string website)
 {
-    // TODO free associated memory!
-    m_book.erase(m_book.find(getAccountPointer(website)));
+    Account* accountPtr = getAccountPointer(website);
+    m_book.erase(m_book.find(accountPtr));
+    delete accountPtr;
 }
 
 

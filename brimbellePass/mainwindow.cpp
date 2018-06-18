@@ -27,8 +27,5 @@ MainWindow::MainWindow() : QTabWidget()
 
 MainWindow::~MainWindow()
 {
-    delete displayEntryTab;
-    delete configurationTab;
-    delete infoTab;
     delete accountsBook;
 }
