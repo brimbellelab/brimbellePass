@@ -4,6 +4,8 @@ A split-database password manager, by [Landry COLLET](https://www.github.com/lan
 
 BrimbellePass is a free software, licensed under GNU GPLv3.
 
+![BrimbellePass, main screen](http://www.brimbellelab.com/brimbellepass/Screenshots/v1.0.0/mainScreen.png)
+
 
 ## Disclaimer
 
@@ -77,13 +79,18 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 
 Make sure you have the dependancies installed, i.e. Qt and OpenSSL.
 
-Open the file `BrimbellePass.pro` with QtCreator or build the software with the following commands:
+Open the file `BrimbellePass.pro` with QtCreator
+
+or
+
+Build the software with the following commands:
 
 *TODO*
 
-To start, go to the configuration tab and point to `loginList.xml` and `pwdList.xml`, and restart the software.
+To start, go to the configuration tab and point to `loginList.xml` and `pwdList.xml` stored in `XML_samples`. Then,
+restart the software.
 
-Default password associated with these files is `GUEST`.
+The default password associated with these files is `GUEST`.
 
 
 ## Road map
@@ -109,8 +116,10 @@ Here are the next features to be developed. Feel free to help and contribute if 
 
 ## Issues
 
-*TODO: point to the BrimbellePass Issues section in GitHub*
-- Elements parsed in an incorrect order when hitting TAB key.
+- Input fields are parsed in an incorrect order when hitting TAB key.
+
+If you find an unknown issue, fell free to mention it [here](https://github.com/brimbellelab/brimbellePass/issues).
+
 
 ## Author
 
