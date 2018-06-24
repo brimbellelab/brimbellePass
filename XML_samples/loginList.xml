@@ -21,7 +21,7 @@
         <safetyQuestion index="0">Maiden name of your mother</safetyQuestion>
         <safetyQuestion index="1">Model of your first car</safetyQuestion>
         <safetyQuestion index="2">What street did you grow up</safetyQuestion>
-        <misc>It unlocks all Google features :)</misc>
+        <misc>It works for all Google products</misc>
     </entry>
     <entry id = "4" website = "IMDB">
         <login type="email">john.doe@gmail.com</login>
