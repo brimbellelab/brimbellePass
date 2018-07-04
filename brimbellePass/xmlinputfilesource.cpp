@@ -13,10 +13,11 @@ XmlInputFileSource::XmlInputFileSource(const QString type, const QString path, Q
 {
     strPath = path;
     strType = type;
+    QVBoxLayout *layoutMain = new QVBoxLayout;
 
     QGroupBox *gbMain = new QGroupBox(strType, this);
-    QHBoxLayout* layoutMain = new QHBoxLayout;
-    gbMain->setLayout(layoutMain),
+    QHBoxLayout* layoutGbMain = new QHBoxLayout;
+    gbMain->setLayout(layoutGbMain),
 
     lineEditPath.setText(strPath);
     QObject::connect(&lineEditPath, SIGNAL(textChanged(QString)), this, SIGNAL(pathChanged(QString)));
@@ -24,8 +25,11 @@ XmlInputFileSource::XmlInputFileSource(const QString type, const QString path, Q
     btnBrowse.setText("Browse");
     QObject::connect(&btnBrowse, SIGNAL(clicked()), this, SLOT(browse()));
 
-    layoutMain->addWidget(&lineEditPath);
-    layoutMain->addWidget(&btnBrowse);
+    layoutGbMain->addWidget(&lineEditPath);
+    layoutGbMain->addWidget(&btnBrowse);
+
+    layoutMain->addWidget(gbMain);
+    this->setLayout(layoutMain);
 }
 
 
@@ -52,6 +56,14 @@ XmlInputFileSource::browse(void)
 void
 XmlInputFileSource::updatePath(const QString &path)
 {
+    std::cout << "Path update!" << std::endl;
     strPath = path;
 }
 
+
+
+void
+XmlInputFileSource::setPath(const QString &path)
+{
+    lineEditPath.setText(path);
+}

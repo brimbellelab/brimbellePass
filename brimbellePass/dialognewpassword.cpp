@@ -6,7 +6,7 @@
 
 #include <QMessageBox>
 #include <QSizePolicy>
-#include <QVBoxLayout>
+#include <QObject>
 
 DialogNewPassword::DialogNewPassword(QWidget *parent) : QDialog(parent)
 {
@@ -24,7 +24,7 @@ DialogNewPassword::DialogNewPassword(QWidget *parent) : QDialog(parent)
     QObject::connect(showPassword, SIGNAL(toggled(bool)), this, SLOT(showPasswordText(bool)));
     QObject::connect(btnOk, SIGNAL(clicked()), this, SLOT(testAndReturn()));
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    layout = new QVBoxLayout;
     layout->addWidget(newPasswordLabel);
     layout->addWidget(newPasswordField);
     layout->addWidget(confirmNewPasswordLabel);
@@ -91,7 +91,7 @@ DialogNewPassword::testAndReturn(void)
 
 
 QString
-DialogNewPassword::data(void)
+DialogNewPassword::password(void)
 {
     return newPassword;
 }

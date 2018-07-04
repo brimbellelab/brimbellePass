@@ -218,7 +218,7 @@ DisplayEntryContent::changePassword(void)
         layoutOldPasswords->addWidget(entryLineOldPasswords.last());
 
         // Update the current password with the new one.
-        entryLineCurrentPassword->setText(dialog->data());
+        entryLineCurrentPassword->setText(dialog->password());
     }
     delete dialog;
 }

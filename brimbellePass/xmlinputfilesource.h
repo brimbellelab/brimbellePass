@@ -20,9 +20,16 @@ public:
 signals:
     void pathChanged(const QString &);
 
+public slots:
+    /// Sets the path displayed in the path lineEdit field.
+    /// @param[in] path The new path.
+    void setPath(const QString &path);
+
+private slots:
+    void updatePath(const QString &path);
+
 private slots:
     void browse(void);
-    void updatePath(const QString &path);
 
 private:
     QLineEdit lineEditPath;

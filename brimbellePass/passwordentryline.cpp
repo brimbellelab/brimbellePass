@@ -90,7 +90,6 @@ PasswordEntryLine::handlePasswordFieldChanged(void)
     // Check if there's an actual change.
     if (lineEditPassword.text() != strPassword)
     {
-        std::cout << "Password field changed" << std::endl;
         strPassword = lineEditPassword.text();
         emit passwordChanged();
     }

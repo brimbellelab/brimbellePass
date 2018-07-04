@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QVBoxLayout>
 #include <QWidget>
 
 class DialogNewPassword : public QDialog
@@ -20,7 +21,7 @@ public:
 
     // Retrieve the new password from the DialogNewPassword.
     // @return The new password approved, not crypted.
-    QString data(void);
+    QString password(void);
 signals:
 
 public slots:
@@ -29,7 +30,8 @@ private slots:
     void showPasswordText(bool show);
     void testAndReturn(void);
 
-private:
+protected:
+    QVBoxLayout* layout;
     QLineEdit* newPasswordField;
     QLabel* confirmNewPasswordLabel;
     QLineEdit* confirmNewPasswordField;

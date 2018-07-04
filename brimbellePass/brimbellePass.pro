@@ -74,7 +74,10 @@ SOURCES += mainwindow.cpp \
     infotab.cpp \
     safetyqawidget.cpp \
     dialogaddsafetyqa.cpp \
-    dialognewpassword.cpp
+    dialognewpassword.cpp \
+    dialognewdatabase.cpp \
+    filepathfinder.cpp \
+    newpasswordwidget.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -90,7 +93,10 @@ HEADERS  += mainwindow.h \
     infotab.h \
     safetyqawidget.h \
     dialogaddsafetyqa.h \
-    dialognewpassword.h
+    dialognewpassword.h \
+    dialognewdatabase.h \
+    filepathfinder.h \
+    newpasswordwidget.h
 
 RESOURCES += \
     resources.qrc

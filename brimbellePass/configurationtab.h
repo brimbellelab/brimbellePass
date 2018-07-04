@@ -22,12 +22,14 @@ public slots:
 
 private slots:
     void saveChanges(void);
+    void createNewDatabase(void);
 
 private:
-    ConfigFile *confFile;
-    QPushButton *btnSaveChanges;
-    XmlInputFileSource *loginsSource;
-    XmlInputFileSource *passwordsSource;
+    ConfigFile* confFile;
+    QPushButton* btnSaveChanges;
+    QPushButton* btnCreateNewDatabase;
+    XmlInputFileSource* loginsSource;
+    XmlInputFileSource* passwordsSource;
 };
 
 #endif // CONFIGURATIONTAB_H
