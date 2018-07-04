@@ -4,4 +4,8 @@
         <file>clipboardIco48.png</file>
         <file>brimbellePass.icns</file>
     </qresource>
+    <qresource prefix="/emptyXmlFiles">
+        <file>emptyLoginsDatabase.xml</file>
+        <file>emptyPasswordsDatabase.xml</file>
+    </qresource>
 </RCC>
