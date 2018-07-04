@@ -17,7 +17,7 @@ public:
     QString getLoginsFilePath(void);
     QString getPasswordsFilePath(void);
     bool updateLoginsAndPasswordsFilePath(const QString &loginsFilePath, const QString &passwordsFilePath);
-    void createConfFile(void);
+
 public slots:
 
 private:
@@ -27,6 +27,7 @@ private:
     QString xmlLoginPath;
     QString xmlPwdPath;
 
+    void createConfFile(void);
     void getXmlLoginAndPwdPathFromConfigFile(void);
 };
 
