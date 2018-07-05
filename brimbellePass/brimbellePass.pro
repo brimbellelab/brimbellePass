@@ -77,7 +77,8 @@ SOURCES += mainwindow.cpp \
     dialognewpassword.cpp \
     dialognewdatabase.cpp \
     filepathfinder.cpp \
-    newpasswordwidget.cpp
+    newpasswordwidget.cpp \
+    dialogopendatabase.cpp
 
 HEADERS  += mainwindow.h \
     displayentrytab.h \
@@ -96,7 +97,9 @@ HEADERS  += mainwindow.h \
     dialognewpassword.h \
     dialognewdatabase.h \
     filepathfinder.h \
-    newpasswordwidget.h
+    newpasswordwidget.h \
+    dialogopendatabase.h \
+    brimbellepasserror.h
 
 RESOURCES += \
     resources.qrc

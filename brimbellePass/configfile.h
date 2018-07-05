@@ -27,6 +27,9 @@ private:
     QString xmlLoginPath;
     QString xmlPwdPath;
 
+    bool openDatabase(QString& loginsPath, QString& passwordsPath);
+    bool createDatabase(QString& loginsPath, QString& passwordsPath);
+    bool promptDatabaseWizard(QString& loginsPath, QString& passwordsPath);
     void createConfFile(void);
     void getXmlLoginAndPwdPathFromConfigFile(void);
 };

@@ -8,7 +8,16 @@
 
 MainWindow::MainWindow() : QTabWidget()
 {
-    confFile = new ConfigFile();
+    try
+    {
+        confFile = new ConfigFile(this);
+    }
+    catch (QString e)
+    {
+        qApp->exit();
+        return;
+    }
+
     accountsBook = new AccountsBook(confFile->getLoginsFilePath().toStdString(),
                                     confFile->getPasswordsFilePath().toStdString());
 

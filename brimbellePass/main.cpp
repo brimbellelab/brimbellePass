@@ -17,6 +17,9 @@
 
 #include "mainwindow.h"
 
+#include "brimbellepasserror.h"
+
+#include <iostream>
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -26,8 +29,25 @@ int main(int argc, char *argv[])
     qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
     qApp->setWindowIcon(QIcon(":icons/brimbellePass.icns"));
 
-    MainWindow w;
-    w.show();
-
-    return a.exec();
+    try
+    {
+        MainWindow w;
+        w.show();
+        std::cout << "Starting...\n" << std::endl;
+        return a.exec();
+    }
+    catch (BrimbellePassError err)
+    {
+        std::cout << "BrimbellePass failed to start: ";
+        switch (err)
+        {
+            case BrimbellePassError::noConfigFile:
+                std::cout << "No configuration file!" << std::endl;
+            break;
+            default:
+                std::cout << "Unhandled error code: " << static_cast<int>(err) << std::endl;
+                break;
+        }
+    }
+    return -1;
 }

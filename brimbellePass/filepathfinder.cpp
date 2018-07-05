@@ -10,7 +10,7 @@ FilePathFinder::FilePathFinder(const QString path, QWidget *parent) : QWidget(pa
     QHBoxLayout* layout = new QHBoxLayout;
     filePath = path;
     filePathField.setText(filePath);
-    QObject::connect(&filePathField, SIGNAL(editingFinished()), this, SLOT(handlePathFieldChanged));
+    QObject::connect(&filePathField, SIGNAL(editingFinished()), this, SLOT(handlePathFieldChanged()));
 
     btnOpenFileDialog.setIconSize(QSize(12, 12));
     btnOpenFileDialog.setIcon(QIcon(":icons/clipboardIco24.png")); // TODO change icon for an "open file".

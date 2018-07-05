@@ -4,9 +4,12 @@
 
 #include "configfile.h"
 
+#include "brimbellepasserror.h"
 #include "dialognewdatabase.h"
+#include "dialogopendatabase.h"
 
 #include <iostream>
+#include <QApplication>
 #include <QMessageBox>
 
 using namespace std;
@@ -104,15 +107,61 @@ ConfigFile::updateLoginsAndPasswordsFilePath(const QString &loginsFilePath, cons
 }
 
 
-
-void
-ConfigFile::createConfFile(void)
+bool
+ConfigFile::openDatabase(QString& loginsPath, QString& passwordsPath)
 {
-    QFile confFile(confFilePath);
-    QString loginsPath;
-    QString passwordsPath;
-    // To create a configFile, the user needs to create a new database (or open an existing one).
+    bool result = false;
+    DialogOpenDatabase* dialog = new DialogOpenDatabase(this);
 
+    if (dialog->exec())
+    {
+        if (dialog->isDataValid())
+        {
+            loginsPath = dialog->loginsPath();
+            passwordsPath = dialog->passwordsPath();
+            result = true;
+        }
+    }
+    else
+    {
+        QMessageBox::critical(this, "No database", "BrimbellePass can't work without logins and passwords databases!");
+    }
+    delete dialog;
+    return result;
+}
+
+
+
+bool
+ConfigFile::createDatabase(QString& loginsPath, QString& passwordsPath)
+{
+    bool result = false;
+    DialogNewDatabase* dialog = new DialogNewDatabase(this);
+
+    if (dialog->exec())
+    {
+        if (dialog->isDataValid())
+        {
+            // dialog->newPassword(); // TODO: Nothing done with the new password yet.
+            // Update the current password with the new one.
+            loginsPath = dialog->loginsPath();
+            passwordsPath = dialog->passwordsPath();
+            result = true;
+        }
+    }
+    else
+    {
+        QMessageBox::critical(this, "No database", "BrimbellePass can't work without logins and passwords databases!");
+    }
+    delete dialog;
+    return result;
+}
+
+
+
+bool
+ConfigFile::promptDatabaseWizard(QString& loginsPath, QString& passwordsPath)
+{
     int reponse = QMessageBox::question(this,
                                         "Setting databases",
                                         "BrimbellePass needs a logins database and a password database. Do you already have one?",
@@ -120,28 +169,32 @@ ConfigFile::createConfFile(void)
 
     if (reponse == QMessageBox::Yes)
     {
-        // Open a dialog box to retrieve the existing path.
-        // TODO.
+        // Open existing databases files.
+        return openDatabase(loginsPath, passwordsPath);
     }
     else
     {
         // Create new databases files.
-        DialogNewDatabase* dialog = new DialogNewDatabase(this);
-        if (dialog->exec())
-        {
-            if (dialog->isDataValid())
-            {
-                // dialog->newPassword(); // TODO: Nothing done with the new password yet.
-                // Update the current password with the new one.
-                loginsPath = dialog->loginsPath();
-                passwordsPath = dialog->passwordsPath();
-            }
-        }
-        else
-        {
-            QMessageBox::critical(this, "No database", "BrimbellePass can't work without logins and passwords databases!");
-        }
-        delete dialog;
+        return createDatabase(loginsPath, passwordsPath);
+    }
+}
+
+
+
+void
+ConfigFile::createConfFile(void)
+{
+    QFile confFile(confFilePath);
+    QString loginsPath;
+    QString passwordsPath;
+
+    // To create a configFile, the user needs to create a new database (or open an existing one).
+    if (!promptDatabaseWizard(loginsPath, passwordsPath))
+    {
+        // If the user didn't provide a path to a database, exit the app.
+        QMessageBox::critical(this, "Can't continue", "BrimbellePass will quit");
+        throw BrimbellePassError::noConfigFile;
+        return;
     }
 
     // Now that we have the content, the configFile can be created.
