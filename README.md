@@ -22,13 +22,15 @@ about computer security.
 
 There are plenty of solutions available, but none seems to match my requirements, which are:
 - AES256 encryption of passwords and "safety answers".
-- No storage of password on untrusted remote servers.
+- No storage of password on untrusted remote servers, the user keeps full control!
+- Open source.
 - No plugins embedded in web browser.
 - Possibility to copy a password without never displaying it on the screen (useful in public areas).
 - Possibility to simply display the password (useful when at home, the app running on a different device than the one
 where you want to enter the password).
 - Easy to track your password/login database with versioning tools such as SVN or Git.
-- *Multiplateform, including smartphones (granted that one's not for tomorrow, although the use of Qt should make it
+- Multiplateform: works on Windows, MacOS X, Linux...
+- *... and also on smartphones (granted that one's not for tomorrow, although the use of Qt should make it
 easier).*
 
 - **and the main feature of BrimbellePass: the ability to store (encrypted) passwords list and logins list in two
@@ -97,15 +99,13 @@ The default password associated with these files is `GUEST`.
 
 Here are the next features to be developed. Feel free to help and contribute if you're interested!
 
-- friendly wizard to get set when the software is opened for the first time.
-- user should be able to change the main password.
+- user should be able to change the main password, which implies to decipher all encrypted data and re-encrypt everything with the new key.
 - the accounts should appear in alphabetical order in the comboBox list AND
 - accounts shouldn't be stored by alphabetical order in the XML files.
 - translation to French, and other languages.
 - add a checksum attribute to the "entry" tag in both XML files to make sure the 2 files match?
 - shuffle entries id, for when one of the database files has been compromised.
 - export the database to a csv file (or even xml file), without encryption, human readable.
-- modify the main password, which implies to decipher all encrypted data and re-encrypt everything with the new key.
 - import CSV files.
 - import other password manager file format.
 - make it possible to access xml files through SSH on a remote machine.
